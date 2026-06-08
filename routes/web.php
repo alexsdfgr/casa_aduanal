@@ -6,15 +6,6 @@ use App\Http\Controllers\PartidaController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
-// ── Ruta temporal para sembrar la base de datos ───────────────────
-Route::get('/run-setup', function() {
-    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
-        '--seed' => true,
-        '--force' => true
-    ]);
-    return "Base de datos reseteada y sembrada con éxito!";
-});
-
 // ── Login / Logout ────────────────────────────────────────
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
