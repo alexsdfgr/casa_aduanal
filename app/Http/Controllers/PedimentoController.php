@@ -153,10 +153,18 @@ class PedimentoController extends Controller
             // Tasas a nivel pedimento
             foreach ($request->input('tasas', []) as $tasa) {
                 if (!empty($tasa['contribucion'])) {
-                    TasaPedimento::create(array_merge(
-                        ['pedimento_id' => $pedimento->id],
-                        $tasa
-                    ));
+                    $nombreContrib = $tasa['contribucion'];
+                    $codigoContrib = \App\Models\TasaPedimento::$contribucionMapping[$nombreContrib] ?? null;
+
+                    if ($codigoContrib !== null) {
+                        TasaPedimento::create([
+                            'pedimento_id' => $pedimento->id,
+                            'contribucion' => $codigoContrib,
+                            'nombre_contribucion' => $nombreContrib,
+                            'cve_tipo_tasa' => $tasa['cve_tipo_tasa'] ?? null,
+                            'tasa' => $tasa['tasa'] ?? 0,
+                        ]);
+                    }
                 }
             }
 
@@ -292,10 +300,18 @@ class PedimentoController extends Controller
             $pedimento->tasas()->delete();
             foreach ($request->input('tasas', []) as $tasa) {
                 if (!empty($tasa['contribucion'])) {
-                    TasaPedimento::create(array_merge(
-                        ['pedimento_id' => $pedimento->id],
-                        $tasa
-                    ));
+                    $nombreContrib = $tasa['contribucion'];
+                    $codigoContrib = \App\Models\TasaPedimento::$contribucionMapping[$nombreContrib] ?? null;
+
+                    if ($codigoContrib !== null) {
+                        TasaPedimento::create([
+                            'pedimento_id' => $pedimento->id,
+                            'contribucion' => $codigoContrib,
+                            'nombre_contribucion' => $nombreContrib,
+                            'cve_tipo_tasa' => $tasa['cve_tipo_tasa'] ?? null,
+                            'tasa' => $tasa['tasa'] ?? 0,
+                        ]);
+                    }
                 }
             }
 

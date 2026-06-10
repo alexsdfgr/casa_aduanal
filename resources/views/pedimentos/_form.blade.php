@@ -853,9 +853,9 @@
                                 <td>
                                     <select name="tasas[{{ $i }}][contribucion]"
                                             class="form-select form-select-sm border-0 tasa-contrib" style="font-size:.78rem">
-                                        <option value="" disabled hidden {{ !($tasa['contribucion'] ?? '') ? 'selected' : '' }}>— Seleccionar —</option>
+                                        <option value="" disabled hidden {{ !($tasa['nombre_contribucion'] ?? $tasa['contribucion'] ?? '') ? 'selected' : '' }}>— Seleccionar —</option>
                                         @foreach($ap12contrib as $val => $lbl)
-                                            <option value="{{ $val }}" {{ ($tasa['contribucion'] ?? '') === $val ? 'selected' : '' }}>{{ $val }}</option>
+                                            <option value="{{ $val }}" {{ ($tasa['nombre_contribucion'] ?? $tasa['contribucion'] ?? '') === $val ? 'selected' : '' }}>{{ $val }}</option>
                                         @endforeach
                                     </select>
                                 </td>
@@ -2308,6 +2308,19 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    // ── Session Keep-Alive ───────────────────────────────────────
+    // Hace una petición cada 5 minutos para mantener la sesión activa
+    setInterval(function() {
+        fetch('{{ route("session.keepalive") }}')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Session keep-alive status:', data.status);
+            })
+            .catch(error => {
+                console.warn('Session keep-alive failed:', error);
+            });
+    }, 5 * 60 * 1000); // 5 minutos
 
     // ── Cálculo inicial ──────────────────────────────────────────
     calcValDolaresFact();

@@ -17,6 +17,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PedimentoController::class, 'dashboard'])
         ->name('dashboard');
 
+    Route::get('/session-keepalive', function () {
+        return response()->json(['status' => 'alive']);
+    })->name('session.keepalive');
+
     // Pedimentos
     Route::post('pedimentos/{pedimento}/liberar', [PedimentoController::class, 'liberar'])->name('pedimentos.liberar');
     Route::resource('pedimentos', PedimentoController::class);
