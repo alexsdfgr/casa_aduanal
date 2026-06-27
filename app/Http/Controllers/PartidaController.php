@@ -36,23 +36,23 @@ class PartidaController extends Controller
         }
 
         $request->validate([
-            'fraccion_arancelaria'   => 'required|string|max:10',
-            'pais_origen_destino'    => 'required|string|max:5',
+            'fraccion'               => 'required|string|max:10',
+            'p_od'                   => 'required|string|max:5',
             'umc'                    => 'required|string|max:5',
             'cantidad_umc'           => 'required|numeric|min:0',
             'precio_valor_comercial' => 'required|numeric|min:0',
-            'val_aduana_usd'         => 'required|numeric|min:0',
-            'importe_precio_pagado'  => 'required|numeric|min:0',
-            'precio_unitario'        => 'required|numeric|min:0',
+            'val_adu_usd'            => 'required|numeric|min:0',
+            'imp_precio_pag'         => 'required|numeric|min:0',
+            'precio_unit'            => 'required|numeric|min:0',
             'descripcion'            => 'required|string',
         ]);
 
         DB::transaction(function () use ($request, $pedimento) {
-            $secuencia = ($pedimento->partidas()->max('secuencia') ?? 0) + 1;
+            $sec = ($pedimento->partidas()->max('sec') ?? 0) + 1;
 
             $partida = Partida::create(array_merge(
                 $request->except(['contribuciones', 'identificadores', '_token', '_method']),
-                ['pedimento_id' => $pedimento->id, 'secuencia' => $secuencia]
+                ['pedimento_id' => $pedimento->id, 'sec' => $sec]
             ));
 
             foreach ($request->input('contribuciones', []) as $c) {
@@ -93,14 +93,14 @@ class PartidaController extends Controller
         }
 
         $request->validate([
-            'fraccion_arancelaria'   => 'required|string|max:10',
-            'pais_origen_destino'    => 'required|string|max:5',
+            'fraccion'               => 'required|string|max:10',
+            'p_od'                   => 'required|string|max:5',
             'umc'                    => 'required|string|max:5',
             'cantidad_umc'           => 'required|numeric|min:0',
             'precio_valor_comercial' => 'required|numeric|min:0',
-            'val_aduana_usd'         => 'required|numeric|min:0',
-            'importe_precio_pagado'  => 'required|numeric|min:0',
-            'precio_unitario'        => 'required|numeric|min:0',
+            'val_adu_usd'            => 'required|numeric|min:0',
+            'imp_precio_pag'         => 'required|numeric|min:0',
+            'precio_unit'            => 'required|numeric|min:0',
             'descripcion'            => 'required|string',
         ]);
 

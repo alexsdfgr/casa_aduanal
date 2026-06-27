@@ -126,30 +126,30 @@ class DatabaseSeeder extends Seeder
 
         // Partida 001
         $p1 = DB::table('partidas')->insertGetId([
-            'pedimento_id' => $pedId, 'secuencia' => 1,
-            'fraccion_arancelaria' => '84433291', 'subdivision' => '04',
-            'vinculacion' => '0', 'metodo_valoracion' => 1,
-            'pais_origen_destino' => 'GBR', 'pais_vendedor_comprador' => 'GBR',
+            'pedimento_id' => $pedId, 'sec' => 1,
+            'fraccion' => '84433291', 'subd_nico' => '04',
+            'vinc' => '0', 'met_val' => 1,
+            'p_od' => 'GBR', 'p_vc' => 'GBR',
             'umc' => '6', 'cantidad_umc' => '1.000',
             'precio_valor_comercial' => '78104.50000', 'precio_origen_destino' => '1',
             'descripcion' => 'IMPRESORA INDUSTRIAL DE INYECCION DE TINTA CONTINUA LINX TT750, NUEVA. N/S: TT750-24-0081',
-            'val_aduana_usd' => '89746.00', 'importe_precio_pagado' => '78104.50',
-            'precio_unitario' => '78104.50000', 'valor_agregado' => '0.00',
+            'val_adu_usd' => '89746.00', 'imp_precio_pag' => '78104.50',
+            'precio_unit' => '78104.50000', 'val_agreg' => '0.00',
             'marca' => 'LINX', 'modelo' => 'TT750', 'codigo_producto' => '4900-3040-P100',
             'created_at' => now(), 'updated_at' => now(),
         ]);
 
         // Partida 002
         DB::table('partidas')->insert([
-            'pedimento_id' => $pedId, 'secuencia' => 2,
-            'fraccion_arancelaria' => '84433291', 'subdivision' => '04',
-            'vinculacion' => '0', 'metodo_valoracion' => 1,
-            'pais_origen_destino' => 'GBR', 'pais_vendedor_comprador' => 'GBR',
+            'pedimento_id' => $pedId, 'sec' => 2,
+            'fraccion' => '84433291', 'subd_nico' => '04',
+            'vinc' => '0', 'met_val' => 1,
+            'p_od' => 'GBR', 'p_vc' => 'GBR',
             'umc' => '6', 'cantidad_umc' => '1.000',
             'precio_valor_comercial' => '78104.50000', 'precio_origen_destino' => '1',
             'descripcion' => 'IMPRESORA INDUSTRIAL DE INYECCION DE TINTA CONTINUA LINX TT750, NUEVA. N/S: TT750-24-0082',
-            'val_aduana_usd' => '89746.00', 'importe_precio_pagado' => '78104.50',
-            'precio_unitario' => '78104.50000', 'valor_agregado' => '0.00',
+            'val_adu_usd' => '89746.00', 'imp_precio_pag' => '78104.50',
+            'precio_unit' => '78104.50000', 'val_agreg' => '0.00',
             'marca' => 'LINX', 'modelo' => 'TT750', 'codigo_producto' => '4900-3040-P100',
             'created_at' => now(), 'updated_at' => now(),
         ]);
