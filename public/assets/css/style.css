@@ -19,6 +19,49 @@
     --white: #1f2937;
     --text: #ffffff;
     --muted: #9ca3af;
+    --border-color: #374151;
+    --input-bg: #111827;
+    --input-disabled-bg: #1f2937;
+    --brand-text-color: #ffffff;
+    --card-shadow: rgba(0, 0, 0, .3);
+    --login-bg: #1f2937;
+    --login-text: #ffffff;
+    --login-label: #ffffff;
+    --bg-alt: rgba(17, 24, 39, 0.5);
+
+    /* Variables de pedimentos locales (show.blade.php y _form.blade.php se mapean a estas por defecto) */
+    --adu-dark: #1e293b;
+    --adu-blue: #38bdf8;
+    --adu-gold: #fde047;
+    --adu-sub-bg: rgba(15, 23, 42, 0.4);
+    --adu-row-alt: rgba(30, 41, 59, 0.5);
+    --adu-label-color: #cbd5e1;
+}
+
+html.light-mode {
+    --azul-dark: #e5e7eb;
+    --azul-navy: #f3f4f6;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --input-disabled-bg: #f1f5f9;
+    --brand-text-color: #0f172a;
+    --card-shadow: rgba(0, 0, 0, .06);
+    --login-bg: #ffffff;
+    --login-text: #0f172a;
+    --login-label: #475569;
+    --bg-alt: #f1f5f9;
+
+    /* Sobreescritura para pedimentos */
+    --adu-dark: #e2e8f0;
+    --adu-blue: #0284c7;
+    --adu-gold: #b45309;
+    --adu-sub-bg: rgba(243, 244, 246, 0.95);
+    --adu-row-alt: rgba(241, 245, 249, 0.6);
+    --adu-label-color: #475569;
 }
 
 * {
@@ -31,6 +74,11 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg);
     color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body, .card, .dashboard-header, .navbar-uptex, .card-aduanal, .table, .table td, .table th, .form-control, .form-select, input, select {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* =====================================================
@@ -74,7 +122,7 @@ body {
 
 .right-side .brand-text {
     text-align: center;
-    color: #ffffff;
+    color: var(--text);
 }
 
 .right-side .brand-text h3 {
@@ -85,7 +133,7 @@ body {
 
 .right-side .brand-text p {
     font-size: .78rem;
-    color: #ffffff;
+    color: var(--muted);
     margin-top: 4px;
 }
 
@@ -120,13 +168,13 @@ body {
 .login-container h2 {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text);
     margin-bottom: 6px;
 }
 
 .login-container .subtitle {
     font-size: .78rem;
-    color: #ffffff;
+    color: var(--muted);
     margin-bottom: 28px;
 }
 
@@ -140,7 +188,7 @@ body {
     font-weight: 600;
     font-size: .82rem;
     margin-bottom: 6px;
-    color: #ffffff;
+    color: var(--text);
 }
 
 .login-container input[type="text"],
@@ -211,7 +259,7 @@ body {
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    color: #ffffff;
+    color: var(--text);
     font-weight: 700;
     font-size: .95rem;
     flex-shrink: 0;
@@ -312,14 +360,14 @@ body {
 }
 
 .dashboard-header h2 {
-    color: #ffffff;
+    color: var(--text);
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 4px;
 }
 
 .dashboard-header p {
-    color: #ffffff;
+    color: var(--text);
     font-size: .85rem;
 }
 
@@ -336,9 +384,9 @@ body {
     padding: 36px 20px;
     border-radius: 14px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+    box-shadow: 0 4px 12px var(--card-shadow);
     text-decoration: none;
-    color: #ffffff !important;
+    color: var(--text) !important;
     font-weight: 600;
     font-size: .95rem;
     border: 2px solid transparent;
@@ -394,14 +442,14 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .06em;
-    color: #ffffff;
+    color: var(--text);
     margin-bottom: 2px;
 }
 
 .kpi-card .kpi-value {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text);
     line-height: 1;
 }
 
@@ -442,7 +490,7 @@ body {
 
 .table-aduanal thead th {
     background: var(--azul-dark) !important;
-    color: #ffffff !important;
+    color: var(--text) !important;
     font-size: .72rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -452,18 +500,18 @@ body {
 }
 
 /* =====================================================
-   TABLAS GENERALES (Para forzar oscuridad total en formularios)
+   TABLAS GENERALES (Para forzar oscuridad/claridad en formularios)
    ===================================================== */
 .table {
     --bs-table-bg: transparent !important;
-    color: #ffffff !important;
-    border-color: #374151 !important;
+    color: var(--text) !important;
+    border-color: var(--border-color) !important;
 }
 
 .table th, .table td {
     background-color: transparent !important;
-    color: #ffffff !important;
-    border-color: #374151 !important;
+    color: var(--text) !important;
+    border-color: var(--border-color) !important;
 }
 
 .table-aduanal {
@@ -473,7 +521,7 @@ body {
 
 .table-aduanal tbody td {
     padding: 10px 14px;
-    border-bottom: 1px solid #374151 !important;
+    border-bottom: 1px solid var(--border-color) !important;
     font-size: .83rem;
     vertical-align: middle;
     color: var(--text) !important;
@@ -488,14 +536,14 @@ body {
    ESTILOS DE FORMULARIO - DARK MODE GLOBALES
    ===================================================== */
 .form-control, .form-select, .form-control:focus, .form-select:focus {
-    background-color: #111827 !important;
-    color: #ffffff !important;
-    border-color: #374151 !important;
+    background-color: var(--input-bg) !important;
+    color: var(--text) !important;
+    border-color: var(--border-color) !important;
 }
 
 .form-control:read-only, .form-control:disabled {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
+    background-color: var(--input-disabled-bg) !important;
+    color: var(--text) !important;
     border-style: dashed !important;
 }
 
@@ -504,30 +552,42 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px #111827 inset !important;
-    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0 30px var(--input-bg) inset !important;
+    -webkit-text-fill-color: var(--text) !important;
 }
 
 /* =====================================================
    DARK MODE INLINE OVERRIDES (Limpia estilos duros oscuros)
    ===================================================== */
 [style*="background:#fff"], [style*="background: #fff"], .card, .dashboard-header, .navbar-uptex, .card-aduanal {
-    background-color: #1f2937 !important; /* Tarjetas base */
+    background-color: var(--white) !important; /* Tarjetas base */
 }
 
-[style*="background:#f8fafc"], [style*="background:#fafafa"], [style*="background:#f0f8f0"], [style*="background:#fff5f5"], [style*="background:#e8f0f8"], [style*="background-color:#f8f9fa"], [style*="background-color: #f8f9fa"], [style*="background:#f8f9fa"] {
-    background-color: rgba(17, 24, 39, 0.5) !important;
-    border-color: #374151 !important;
+[style*="background:#f8fafc"], [style*="background:#fafafa"], [style*="background:#f0f8f0"], [style*="background:#fff5f5"], [style*="background:#e8f0f8"], [style*="background-color:#f8f9fa"], [style*="background-color: #f8f9fa"], [style*="background:#f8f9fa"], [style*="background:#f0f4f8"], [style*="background:#e0f2fe"] {
+    background-color: var(--bg-alt) !important;
+    border-color: var(--border-color) !important;
 }
 
-[style*="background:#dde8f4"], [style*="background:#e8f4f0"] {
-    background-color: #111827 !important;
-    color: #ffffff !important;
-    border-color: #374151 !important;
+[style*="background:#dde8f4"], [style*="background:#e8f4f0"], [style*="background:#1e293b"], [style*="background: #1e293b"], [style*="background:#475569"], [style*="background: #475569"], [style*="background:#1e2d45"], [style*="background:#0f172a"], [style*="background: #0f172a"] {
+    background-color: var(--bg-alt) !important;
+    color: var(--text) !important;
+    border-color: var(--border-color) !important;
 }
 
-[style*="border-top:1px solid #dee2e6"], [style*="border-bottom:1px solid #dee2e6"], [style*="border-top:1px solid #c8d8ed"], [style*="border-bottom:1px solid #c8d8ed"] {
-    border-color: #374151 !important;
+[style*="border-top:1px solid #dee2e6"], [style*="border-bottom:1px solid #dee2e6"], [style*="border-top:1px solid #c8d8ed"], [style*="border-bottom:1px solid #c8d8ed"], [style*="border:1px solid #334155"], [style*="border-top:1px solid #2d3f5e"] {
+    border-color: var(--border-color) !important;
+}
+
+/* Clases específicas de tablas y controles de pedimentos */
+.tbl-adu {
+    color: var(--text) !important;
+}
+.tbl-adu th, .tbl-adu td {
+    border-color: var(--border-color) !important;
+}
+.linea-captura {
+    background: var(--input-bg) !important;
+    border-color: var(--border-color) !important;
 }
 
 /* OVERRIDES PARA TEXTO INLINE DURO (Pedimentos Create y Show) */
@@ -536,16 +596,16 @@ input:-webkit-autofill:active{
 [style*="color:#1a365d"], [style*="color: #1a365d"],
 [style*="color:#0369a1"], [style*="color: #0369a1"],
 [style*="color:#475569"], [style*="color: #475569"] {
-    color: #ffffff !important;
+    color: var(--text) !important;
 }
 
 [style*="color:#991b1b"], [style*="color: #991b1b"] {
-    color: #fca5a5 !important; /* Rojo claro para fondo oscuro */
+    color: var(--rojo) !important; /* Mantiene rojo legible */
 }
 
 .form-label, .form-text, .badge-apendice, 
 .lbl-s, .val-s, .lbl-inline, .val-inline, .sec-header {
-    color: #ffffff !important;
+    color: var(--text) !important;
 }
 
 /* =====================================================
@@ -631,4 +691,36 @@ input:-webkit-autofill:active{
     .main-content {
         padding: 16px;
     }
+}
+
+/* =====================================================
+   7. INTERRUPTOR DE TEMA (MODO CLARO / OSCURO)
+   ===================================================== */
+.btn-theme-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-theme-toggle:hover {
+    background-color: var(--azul-dark);
+    transform: scale(1.1);
+}
+
+.btn-theme-toggle i {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme-toggle:active i {
+    transform: rotate(45deg) scale(0.9);
 }

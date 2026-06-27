@@ -9,6 +9,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -52,6 +60,12 @@
 
             <li>
                 <span class="rol-badge rol-{{ strtolower($rol) }}">{{ $rol }}</span>
+            </li>
+
+            <li>
+                <button type="button" id="theme-toggle-btn" class="btn-theme-toggle" title="Cambiar tema">
+                    <i id="theme-toggle-icon" class="bi bi-moon-fill"></i>
+                </button>
             </li>
 
             <li>
@@ -100,6 +114,37 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const themeToggleIcon = document.getElementById('theme-toggle-icon');
+
+            function updateThemeUI(theme) {
+                if (theme === 'light') {
+                    themeToggleIcon.className = 'bi bi-sun-fill';
+                } else {
+                    themeToggleIcon.className = 'bi bi-moon-fill';
+                }
+            }
+
+            // Inicializar la interfaz del tema según el estado actual
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            updateThemeUI(currentTheme);
+
+            themeToggleBtn.addEventListener('click', function () {
+                const isLight = document.documentElement.classList.contains('light-mode');
+                if (isLight) {
+                    document.documentElement.classList.remove('light-mode');
+                    localStorage.setItem('theme', 'dark');
+                    updateThemeUI('dark');
+                } else {
+                    document.documentElement.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                    updateThemeUI('light');
+                }
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 
