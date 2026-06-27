@@ -8,7 +8,7 @@
     <title>@yield('title', 'Simulador Aduanal') – UPTex</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v=1.0.2">
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'dark';
