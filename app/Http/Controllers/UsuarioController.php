@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\Grupo;
 
 class UsuarioController extends Controller
 {
@@ -37,7 +38,8 @@ class UsuarioController extends Controller
         if (!in_array(auth()->user()->rol, ['ADMIN', 'PROFESOR'])) {
             abort(403, 'No tienes permiso para crear usuarios.');
         }
-        return view('usuarios.create');
+        $grupos = Grupo::orderBy('nombre')->get();
+        return view('usuarios.create', compact('grupos'));
     }
 
     // ── STORE ─────────────────────────────────────────────
@@ -54,9 +56,9 @@ class UsuarioController extends Controller
         ];
 
         if (auth()->user()->rol === 'PROFESOR') {
-            $validationRules['grupo'] = 'required|string|max:50';
+            $validationRules['grupo'] = 'required|string|max:50|exists:grupos,nombre';
         } else {
-            $validationRules['grupo'] = 'nullable|string|max:50';
+            $validationRules['grupo'] = 'nullable|string|max:50|exists:grupos,nombre';
         }
 
         $data = $request->validate($validationRules);
@@ -93,7 +95,8 @@ class UsuarioController extends Controller
         } elseif (auth()->user()->rol === 'ADMIN' && $usuario->rol !== 'PROFESOR') {
             abort(403, 'El administrador solo puede gestionar profesores.');
         }
-        return view('usuarios.create', compact('usuario'));
+        $grupos = Grupo::orderBy('nombre')->get();
+        return view('usuarios.create', compact('usuario', 'grupos'));
     }
 
     // ── UPDATE ────────────────────────────────────────────
@@ -120,9 +123,9 @@ class UsuarioController extends Controller
         ];
 
         if (auth()->user()->rol === 'PROFESOR') {
-            $validationRules['grupo'] = 'required|string|max:50';
+            $validationRules['grupo'] = 'required|string|max:50|exists:grupos,nombre';
         } else {
-            $validationRules['grupo'] = 'nullable|string|max:50';
+            $validationRules['grupo'] = 'nullable|string|max:50|exists:grupos,nombre';
         }
 
         $data = $request->validate($validationRules);

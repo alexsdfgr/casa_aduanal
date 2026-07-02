@@ -32,16 +32,22 @@
 
 {{-- Opciones de Gestión: Estiradas al mismo ancho que los KPIs --}}
 <div class="row g-3 mb-4">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <a href="{{ route('pedimentos.index') }}" class="card-option w-100 m-0" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 100%;">
             <i class="bi bi-file-earmark-text"></i>
             Gestión de Pedimentos
         </a>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <a href="{{ route('usuarios.index') }}" class="card-option w-100 m-0" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 100%;">
             <i class="bi bi-people"></i>
-            Gestión de Usuarios
+            Gestión de Profesores
+        </a>
+    </div>
+    <div class="col-sm-4">
+        <a href="{{ route('grupos.index') }}" class="card-option w-100 m-0" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 100%;">
+            <i class="bi bi-collection"></i>
+            Gestión de Grupos
         </a>
     </div>
 </div>

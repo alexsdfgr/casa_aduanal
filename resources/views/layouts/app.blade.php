@@ -35,6 +35,12 @@
                 <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="bi bi-house me-1"></i>Inicio
                     </a></li>
+                <li><a href="{{ route('usuarios.index') }}" class="{{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+                        <i class="bi bi-people me-1"></i>Profesores
+                    </a></li>
+                <li><a href="{{ route('grupos.index') }}" class="{{ request()->routeIs('grupos.*') ? 'active' : '' }}">
+                        <i class="bi bi-collection me-1"></i>Grupos
+                    </a></li>
 
             @elseif($rol === 'PROFESOR')
                 <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">

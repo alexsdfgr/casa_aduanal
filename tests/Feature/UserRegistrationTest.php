@@ -49,6 +49,8 @@ class UserRegistrationTest extends TestCase
             'activo' => true,
         ]);
 
+        \App\Models\Grupo::create(['nombre' => '3A']);
+
         $this->actingAs($profesor);
 
         $response = $this->post(route('usuarios.store'), [

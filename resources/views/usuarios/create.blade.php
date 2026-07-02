@@ -57,13 +57,19 @@
                 </div>
             </div>
 
+            @if(auth()->user()->rol === 'PROFESOR')
             <div class="mb-3">
-                <label class="form-label fw-bold">Grupo {!! auth()->user()->rol === 'PROFESOR' ? '<span class="text-danger">*</span>' : '<small class="text-muted fw-normal">(opcional)</small>' !!}</label>
-                <input type="text" name="grupo" class="form-control"
-                       value="{{ old('grupo', $usuario->grupo ?? '') }}"
-                       placeholder="Ej. 3A, Vespertino, etc."
-                       {{ auth()->user()->rol === 'PROFESOR' ? 'required' : '' }}>
+                <label class="form-label fw-bold">Grupo <span class="text-danger">*</span></label>
+                <select name="grupo" class="form-select" required>
+                    <option value="" disabled {{ !old('grupo', $usuario->grupo ?? null) ? 'selected' : '' }}>— Seleccionar Grupo —</option>
+                    @foreach($grupos as $g)
+                        <option value="{{ $g->nombre }}" {{ old('grupo', $usuario->grupo ?? '') === $g->nombre ? 'selected' : '' }}>
+                            {{ $g->nombre }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
+            @endif
 
             @if(auth()->user()->rol === 'ADMIN')
                 <input type="hidden" name="rol" value="PROFESOR">
