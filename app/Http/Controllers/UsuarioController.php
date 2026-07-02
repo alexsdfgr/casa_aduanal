@@ -14,9 +14,11 @@ class UsuarioController extends Controller
     // ── INDEX ─────────────────────────────────────────────
     public function index()
     {
-        // ADMIN ve todos / PROFESOR solo ve alumnos
+        // ADMIN solo ve profesores / PROFESOR solo ve sus alumnos
         if (auth()->user()->rol === 'ADMIN') {
-            $usuarios = Usuario::orderBy('rol')->orderBy('nombre')->paginate(20);
+            $usuarios = Usuario::where('rol', 'PROFESOR')
+                               ->orderBy('nombre')
+                               ->paginate(20);
         } elseif (auth()->user()->rol === 'PROFESOR') {
             $usuarios = Usuario::where('rol', 'ALUMNO')
                                ->where('profesor_id', auth()->id())
@@ -45,17 +47,25 @@ class UsuarioController extends Controller
             abort(403);
         }
 
-        $data = $request->validate([
+        $validationRules = [
             'nombre' => 'required|string|max:200',
             'username' => 'required|string|max:60|unique:usuarios,username',
             'password' => 'required|string|min:6|confirmed',
-            'rol' => auth()->user()->rol === 'PROFESOR' ? ['required', Rule::in(['ALUMNO'])] : ['required', Rule::in(['ADMIN', 'PROFESOR', 'ALUMNO'])],
-            'grupo' => auth()->user()->rol === 'PROFESOR' ? 'required|string|max:50' : 'nullable|string|max:50',
-        ]);
+        ];
 
-        $profesor_id = null;
         if (auth()->user()->rol === 'PROFESOR') {
-            $data['rol'] = 'ALUMNO';
+            $validationRules['grupo'] = 'required|string|max:50';
+        } else {
+            $validationRules['grupo'] = 'nullable|string|max:50';
+        }
+
+        $data = $request->validate($validationRules);
+
+        if (auth()->user()->rol === 'ADMIN') {
+            $rol = 'PROFESOR';
+            $profesor_id = null;
+        } else {
+            $rol = 'ALUMNO';
             $profesor_id = auth()->id();
         }
 
@@ -63,7 +73,7 @@ class UsuarioController extends Controller
             'nombre' => $data['nombre'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'rol' => $data['rol'],
+            'rol' => $rol,
             'activo' => true,
             'profesor_id' => $profesor_id,
             'grupo' => $data['grupo'] ?? null,
@@ -80,6 +90,8 @@ class UsuarioController extends Controller
             abort(403, 'Solo puedes editar a tus propios alumnos.');
         } elseif (auth()->user()->rol === 'ALUMNO' || (auth()->user()->rol === 'PROFESOR' && $usuario->rol !== 'ALUMNO')) {
             abort(403);
+        } elseif (auth()->user()->rol === 'ADMIN' && $usuario->rol !== 'PROFESOR') {
+            abort(403, 'El administrador solo puede gestionar profesores.');
         }
         return view('usuarios.create', compact('usuario'));
     }
@@ -91,9 +103,11 @@ class UsuarioController extends Controller
             abort(403, 'Solo puedes editar a tus propios alumnos.');
         } elseif (auth()->user()->rol === 'ALUMNO') {
             abort(403);
+        } elseif (auth()->user()->rol === 'ADMIN' && $usuario->rol !== 'PROFESOR') {
+            abort(403, 'El administrador solo puede gestionar profesores.');
         }
 
-        $data = $request->validate([
+        $validationRules = [
             'nombre' => 'required|string|max:200',
             'username' => [
                 'required',
@@ -102,18 +116,27 @@ class UsuarioController extends Controller
                 Rule::unique('usuarios', 'username')->ignore($usuario->id)
             ],
             'password' => 'nullable|string|min:6|confirmed',
-            'rol' => auth()->user()->rol === 'PROFESOR' ? ['required', Rule::in(['ALUMNO'])] : ['required', Rule::in(['ADMIN', 'PROFESOR', 'ALUMNO'])],
             'activo' => 'boolean',
-            'grupo' => auth()->user()->rol === 'PROFESOR' ? 'required|string|max:50' : 'nullable|string|max:50',
-        ]);
+        ];
+
+        if (auth()->user()->rol === 'PROFESOR') {
+            $validationRules['grupo'] = 'required|string|max:50';
+        } else {
+            $validationRules['grupo'] = 'nullable|string|max:50';
+        }
+
+        $data = $request->validate($validationRules);
 
         $usuario->nombre = $data['nombre'];
         $usuario->username = $data['username'];
-        if (auth()->user()->rol === 'ADMIN') {
-            $usuario->rol = $data['rol'];
-        }
         $usuario->activo = $request->boolean('activo', true);
         $usuario->grupo = $data['grupo'] ?? null;
+
+        if (auth()->user()->rol === 'ADMIN') {
+            $usuario->rol = 'PROFESOR';
+        } else {
+            $usuario->rol = 'ALUMNO';
+        }
 
         if (!empty($data['password'])) {
             $usuario->password = Hash::make($data['password']);
@@ -132,6 +155,8 @@ class UsuarioController extends Controller
             abort(403, 'Solo puedes eliminar a tus propios alumnos.');
         } elseif (auth()->user()->rol === 'ALUMNO') {
             abort(403);
+        } elseif (auth()->user()->rol === 'ADMIN' && $usuario->rol !== 'PROFESOR') {
+            abort(403, 'El administrador solo puede gestionar profesores.');
         }
 
         if ($usuario->rol === 'ADMIN' && Usuario::where('rol', 'ADMIN')->count() <= 1) {

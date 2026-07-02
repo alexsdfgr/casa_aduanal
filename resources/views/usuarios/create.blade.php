@@ -66,20 +66,7 @@
             </div>
 
             @if(auth()->user()->rol === 'ADMIN')
-            <div class="mb-3">
-                <label class="form-label fw-bold">Rol *</label>
-                <select name="rol" class="form-select" required>
-                    <option value="ALUMNO"   {{ old('rol',$usuario->rol??'ALUMNO')==='ALUMNO'  ?'selected':'' }}>
-                        ALUMNO – Registra sus propios pedimentos
-                    </option>
-                    <option value="PROFESOR" {{ old('rol',$usuario->rol??'')==='PROFESOR'?'selected':'' }}>
-                        PROFESOR – Revisa pedimentos de alumnos
-                    </option>
-                    <option value="ADMIN"    {{ old('rol',$usuario->rol??'')==='ADMIN'   ?'selected':'' }}>
-                        ADMIN – Acceso total al sistema
-                    </option>
-                </select>
-            </div>
+                <input type="hidden" name="rol" value="PROFESOR">
             @endif
 
             @if(isset($usuario))
