@@ -67,4 +67,47 @@ class PedimentoRegistrationTest extends TestCase
             'fletes' => 0,
         ]);
     }
+
+    public function test_can_access_print_pedimento_view(): void
+    {
+        $user = Usuario::create([
+            'nombre' => 'Test Alumno',
+            'username' => 'test_alumno_print',
+            'password' => bcrypt('password123'),
+            'rol' => 'ALUMNO',
+            'activo' => true,
+        ]);
+
+        $this->actingAs($user);
+
+        // Create a pedimento
+        $pedimento = \App\Models\Pedimento::create([
+            'usuario_id' => $user->id,
+            'num_pedimento' => '26 05 1465 999999',
+            'tipo_operacion' => 'IMP',
+            'cve_pedimento' => 'BO',
+            'regimen' => 'ITR',
+            'destino_origen' => '1',
+            'tipo_cambio' => 20,
+            'peso_bruto' => 52,
+            'aduana_entrada_salida' => '010',
+            'rfc_importador' => '4562136587954',
+            'nombre_importador' => 'SEDFRGTHJKLM,Ñ',
+            'domicilio_importador' => 'DFTGHYJUKL,Ñ',
+            'valor_dolares' => 0,
+            'valor_aduana' => 520000,
+            'precio_pagado_valor_comercial' => 0,
+            'fletes' => 0,
+            'embalajes' => 0,
+            'otros_incrementables' => 0,
+            'total_bultos' => 1,
+            'estado' => 'borrador',
+        ]);
+
+        $response = $this->get(route('pedimentos.imprimir', $pedimento));
+
+        $response->assertStatus(200);
+        $response->assertSee('26 05 1465 999999');
+        $response->assertSee('api.qrserver.com');
+    }
 }

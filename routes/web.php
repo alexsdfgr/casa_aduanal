@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
 
     // Pedimentos
     Route::post('pedimentos/{pedimento}/liberar', [PedimentoController::class, 'liberar'])->name('pedimentos.liberar');
+    Route::get('pedimentos/{pedimento}/imprimir', [PedimentoController::class, 'imprimir'])->name('pedimentos.imprimir');
     Route::resource('pedimentos', PedimentoController::class);
 
     // Partidas (anidadas bajo pedimentos)

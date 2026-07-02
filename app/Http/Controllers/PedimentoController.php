@@ -430,6 +430,35 @@ class PedimentoController extends Controller
         return back()->with('success', 'Pedimento marcado como liberado correctamente.');
     }
 
+    public function imprimir(Pedimento $pedimento)
+    {
+        $this->verificarAcceso($pedimento);
+
+        $pedimento->load([
+            'partidas.contribuciones',
+            'partidas.identificadores',
+            'proveedores',
+            'facturas',
+            'identificadores',
+            'tasas',
+            'cuadroLiquidacion',
+            'pagoElectronico',
+            'agente',
+        ]);
+
+        // Generar datos para el QR
+        $patente = $pedimento->pagoElectronico->patente ?? $pedimento->agente->patente ?? '0000';
+        $fechaPago = $pedimento->fecha_pago ? $pedimento->fecha_pago->format('Y-m-d') : '';
+        $firma = $pedimento->codigo_aceptacion ?? 'SIN FIRMA';
+        $qrData = "PEDIMENTO: {$pedimento->num_pedimento}\n";
+        $qrData .= "PATENTE: {$patente}\n";
+        $qrData .= "RFC: {$pedimento->rfc_importador}\n";
+        $qrData .= "PAGO: {$fechaPago}\n";
+        $qrData .= "FIRMA: {$firma}";
+
+        return view('pedimentos.imprimir', compact('pedimento', 'qrData'));
+    }
+
     // ── Helper ────────────────────────────────────────────────────────────
     private function verificarAcceso(Pedimento $pedimento): void
     {

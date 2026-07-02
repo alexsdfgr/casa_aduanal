@@ -175,6 +175,9 @@
             <span class="badge bg-{{ $badge }}">{{ ucfirst($pedimento->estado) }}</span>
         </div>
         <div class="d-flex gap-2">
+            <a href="{{ route('pedimentos.imprimir', $pedimento) }}" target="_blank" class="btn btn-sm btn-success">
+                <i class="bi bi-printer me-1"></i> Imprimir
+            </a>
             <a href="{{ route('pedimentos.edit', $pedimento) }}" class="btn btn-sm btn-outline-primary">
                 <i class="bi bi-pencil me-1"></i> Editar
             </a>
