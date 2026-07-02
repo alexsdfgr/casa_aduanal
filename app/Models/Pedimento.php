@@ -63,6 +63,33 @@ class Pedimento extends Model
         'fecha_pago' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($pedimento) {
+            $zeroOnNullFields = [
+                'val_seguros',
+                'seguros',
+                'fletes',
+                'embalajes',
+                'otros_incrementables',
+                'transporte_decrementables',
+                'seguro_decrementables',
+                'carga_decrementables',
+                'descarga_decrementables',
+                'otros_decrementables',
+                'valor_dolares',
+                'valor_aduana',
+                'precio_pagado_valor_comercial',
+            ];
+
+            foreach ($zeroOnNullFields as $field) {
+                if (is_null($pedimento->getAttribute($field))) {
+                    $pedimento->setAttribute($field, 0);
+                }
+            }
+        });
+    }
+
     // ── Relaciones ────────────────────────────────────────
     public function usuario()
     {

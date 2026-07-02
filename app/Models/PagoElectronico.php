@@ -30,6 +30,15 @@ class PagoElectronico extends Model
         'fecha_pago' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($pago) {
+            if (is_null($pago->getAttribute('importe_pagado'))) {
+                $pago->setAttribute('importe_pagado', 0);
+            }
+        });
+    }
+
     public function pedimento()
     {
         return $this->belongsTo(Pedimento::class, 'pedimento_id');

@@ -33,6 +33,34 @@ class Partida extends Model
         'obs_partida',      // antes: 'observaciones'
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($partida) {
+            $fieldsWithZero = [
+                'cantidad_umc',
+                'precio_valor_comercial',
+                'val_adu_usd',
+                'imp_precio_pag',
+                'precio_unit',
+                'val_agreg',
+            ];
+            foreach ($fieldsWithZero as $field) {
+                if (is_null($partida->getAttribute($field))) {
+                    $partida->setAttribute($field, 0);
+                }
+            }
+            if (is_null($partida->getAttribute('sec'))) {
+                $partida->setAttribute('sec', 1);
+            }
+            if (is_null($partida->getAttribute('vinc'))) {
+                $partida->setAttribute('vinc', '0');
+            }
+            if (is_null($partida->getAttribute('met_val'))) {
+                $partida->setAttribute('met_val', 1);
+            }
+        });
+    }
+
     public function pedimento()
     {
         return $this->belongsTo(Pedimento::class, 'pedimento_id');

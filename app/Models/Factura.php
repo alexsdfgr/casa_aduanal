@@ -29,6 +29,21 @@ class Factura extends Model
         'fecha' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($factura) {
+            if (is_null($factura->getAttribute('val_moneda_fact'))) {
+                $factura->setAttribute('val_moneda_fact', 0);
+            }
+            if (is_null($factura->getAttribute('factor_moneda'))) {
+                $factura->setAttribute('factor_moneda', 1);
+            }
+            if (is_null($factura->getAttribute('val_dolares'))) {
+                $factura->setAttribute('val_dolares', 0);
+            }
+        });
+    }
+
     public function pedimento()
     {
         return $this->belongsTo(Pedimento::class, 'pedimento_id');

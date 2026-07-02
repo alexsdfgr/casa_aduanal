@@ -25,6 +25,26 @@ class CuadroLiquidacion extends Model
         'total',         // 30900
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($cuadro) {
+            $fields = [
+                'fp_izq',
+                'importe_izq',
+                'fp_der',
+                'importe_der',
+                'efectivo',
+                'otros',
+                'total',
+            ];
+            foreach ($fields as $field) {
+                if (is_null($cuadro->getAttribute($field))) {
+                    $cuadro->setAttribute($field, 0);
+                }
+            }
+        });
+    }
+
     public function pedimento()
     {
         return $this->belongsTo(Pedimento::class, 'pedimento_id');

@@ -21,6 +21,21 @@ class ContribucionPartida extends Model
         'importe',      // 0, 28948, 40, 134
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($contribucion) {
+            if (is_null($contribucion->getAttribute('tasa'))) {
+                $contribucion->setAttribute('tasa', 0);
+            }
+            if (is_null($contribucion->getAttribute('fp'))) {
+                $contribucion->setAttribute('fp', 1);
+            }
+            if (is_null($contribucion->getAttribute('importe'))) {
+                $contribucion->setAttribute('importe', 0);
+            }
+        });
+    }
+
     public function partida()
     {
         return $this->belongsTo(Partida::class, 'partida_id');
