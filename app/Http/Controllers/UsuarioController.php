@@ -17,7 +17,7 @@ class UsuarioController extends Controller
     {
         // ADMIN solo ve profesores / PROFESOR solo ve sus alumnos
         if (auth()->user()->rol === 'ADMIN') {
-            $usuarios = Usuario::where('rol', 'PROFESOR')
+            $usuarios = Usuario::with('grupos')->where('rol', 'PROFESOR')
                                ->orderBy('nombre')
                                ->paginate(20);
         } elseif (auth()->user()->rol === 'PROFESOR') {

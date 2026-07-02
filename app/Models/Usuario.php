@@ -61,6 +61,11 @@ class Usuario extends Model implements AuthenticatableContract
         return $this->hasMany(Usuario::class, 'profesor_id');
     }
 
+    public function grupos()
+    {
+        return $this->hasMany(Grupo::class, 'profesor_id');
+    }
+
     // ── Laravel Auth: campo de autenticación ─────────────
     public function getAuthIdentifierName(): string
     {

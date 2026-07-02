@@ -47,6 +47,12 @@
                     <td>
                         @if($u->rol === 'ALUMNO')
                             <span class="badge bg-info text-dark">{{ $u->grupo ?? 'Sin grupo' }}</span>
+                        @elseif($u->rol === 'PROFESOR')
+                            @forelse($u->grupos as $g)
+                                <span class="badge bg-primary text-white me-1">{{ $g->nombre }}</span>
+                            @empty
+                                <span class="text-muted" style="font-size: .85rem; font-style: italic;">Sin grupos</span>
+                            @endforelse
                         @else
                             <span class="text-muted">—</span>
                         @endif
