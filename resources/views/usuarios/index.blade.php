@@ -9,7 +9,12 @@
     </h5>
     @if(in_array(auth()->user()->rol, ['ADMIN', 'PROFESOR']))
     <a href="{{ route('usuarios.create') }}" class="btn btn-sm btn-success px-3">
-        <i class="bi bi-person-plus me-1"></i> Nuevo Usuario
+        <i class="bi bi-person-plus me-1"></i>
+        @if(auth()->user()->rol === 'ADMIN')
+            Nuevo Profesor
+        @else
+            Nuevo Alumno
+        @endif
     </a>
     @endif
 </div>

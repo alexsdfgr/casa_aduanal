@@ -67,4 +67,41 @@ class GrupoManagementTest extends TestCase
         $response = $this->get(route('grupos.index'));
         $response->assertStatus(403);
     }
+
+    public function test_admin_can_create_group_with_profesor(): void
+    {
+        $admin = Usuario::create([
+            'nombre' => 'Admin User',
+            'username' => 'admin_test2',
+            'password' => bcrypt('password123'),
+            'rol' => 'ADMIN',
+            'activo' => true,
+        ]);
+
+        $profesor = Usuario::create([
+            'nombre' => 'Profesor Test',
+            'username' => 'prof_test2',
+            'password' => bcrypt('password123'),
+            'rol' => 'PROFESOR',
+            'activo' => true,
+        ]);
+
+        $this->actingAs($admin);
+
+        // Create group with professor
+        $response = $this->post(route('grupos.store'), [
+            'nombre' => '8VSC2',
+            'profesor_id' => $profesor->id,
+        ]);
+
+        $response->assertRedirect(route('grupos.index'));
+        $this->assertDatabaseHas('grupos', [
+            'nombre' => '8VSC2',
+            'profesor_id' => $profesor->id,
+        ]);
+
+        // Access index and see professor name
+        $response = $this->get(route('grupos.index'));
+        $response->assertSee('Profesor Test');
+    }
 }

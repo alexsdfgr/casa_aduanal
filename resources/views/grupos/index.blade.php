@@ -19,6 +19,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nombre del Grupo</th>
+                            <th>Profesor a Cargo</th>
                             <th>Fecha de Registro</th>
                             <th class="text-center">Acciones</th>
                         </tr>
@@ -28,6 +29,13 @@
                         <tr>
                             <td>{{ $g->id }}</td>
                             <td class="fw-bold">{{ $g->nombre }}</td>
+                            <td>
+                                @if($g->profesor)
+                                    <span class="badge bg-secondary" style="font-size: .8rem; color: #fff;">{{ $g->profesor->nombre }}</span>
+                                @else
+                                    <span class="text-muted" style="font-size: .8rem; font-style: italic;">Sin asignar</span>
+                                @endif
+                            </td>
                             <td>{{ $g->created_at->format('d/m/Y') }}</td>
                             <td class="text-center">
                                 <form method="POST" action="{{ route('grupos.destroy', $g) }}"
@@ -41,7 +49,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 <i class="bi bi-inbox fs-3 d-block mb-2"></i>No hay grupos registrados todavía.
                             </td>
                         </tr>
@@ -69,6 +77,18 @@
                         <input type="text" name="nombre" class="form-control"
                                placeholder="Ej. 3A, 4B, Vespertino, etc."
                                value="{{ old('nombre') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Profesor a Cargo</label>
+                        <select name="profesor_id" class="form-select">
+                            <option value="">— Sin profesor —</option>
+                            @foreach($profesores as $p)
+                                <option value="{{ $p->id }}" {{ old('profesor_id') == $p->id ? 'selected' : '' }}>
+                                    {{ $p->nombre }} ({{ $p->username }})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <button type="submit" class="btn btn-success w-100">

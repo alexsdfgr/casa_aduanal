@@ -10,5 +10,11 @@ class Grupo extends Model
 
     protected $fillable = [
         'nombre',
+        'profesor_id',
     ];
+
+    public function profesor()
+    {
+        return $this->belongsTo(Usuario::class, 'profesor_id');
+    }
 }
