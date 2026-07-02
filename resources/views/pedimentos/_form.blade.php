@@ -1609,7 +1609,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const numPedInput = document.querySelector('[name="pedimento[num_pedimento]"]');
     function calcReferencia() {
         const raw = (numPedInput?.value || '').replace(/\s+/g, '');
-        if (raw.length >= 15) {
+        if (raw.length >= 14) {
             const patente  = raw.substring(4, 8);
             const folio    = raw.substring(8, 15).replace(/^0+/, '');
             const anioCort = raw.substring(0, 2);
