@@ -75,7 +75,6 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nombre del Grupo *</label>
                         <input type="text" name="nombre" class="form-control"
-                               placeholder="Ej. 3A, 4B, Vespertino, etc."
                                value="{{ old('nombre') }}" required>
                     </div>
 
