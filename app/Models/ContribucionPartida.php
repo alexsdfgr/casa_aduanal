@@ -36,6 +36,28 @@ class ContribucionPartida extends Model
         });
     }
 
+    // Mapear el atributo virtual 'con' a la columna real de la base de datos 'contribucion'
+    public function setConAttribute($value)
+    {
+        $this->attributes['contribucion'] = $value;
+    }
+
+    public function getConAttribute()
+    {
+        return $this->attributes['contribucion'] ?? null;
+    }
+
+    // Mapear el atributo virtual 'tt' a la columna real de la base de datos 'tipo_tasa'
+    public function setTtAttribute($value)
+    {
+        $this->attributes['tipo_tasa'] = $value;
+    }
+
+    public function getTtAttribute()
+    {
+        return $this->attributes['tipo_tasa'] ?? null;
+    }
+
     public function partida()
     {
         return $this->belongsTo(Partida::class, 'partida_id');

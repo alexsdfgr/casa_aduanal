@@ -110,4 +110,68 @@ class PedimentoRegistrationTest extends TestCase
         $response->assertSee('26 05 1465 999999');
         $response->assertSee('api.qrserver.com');
     }
+
+    public function test_can_register_pedimento_with_partidas_and_contribs(): void
+    {
+        $user = Usuario::create([
+            'nombre' => 'Test Alumno',
+            'username' => 'test_alumno_contribs',
+            'password' => bcrypt('password123'),
+            'rol' => 'ALUMNO',
+            'activo' => true,
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->post(route('pedimentos.store'), [
+            'pedimento' => [
+                'num_pedimento' => '26 05 1465 111111',
+                'tipo_operacion' => 'IMP',
+                'cve_pedimento' => 'BO',
+                'regimen' => 'ITR',
+                'destino_origen' => '1',
+                'tipo_cambio' => '20',
+                'peso_bruto' => '52',
+                'aduana_entrada_salida' => '010',
+                'rfc_importador' => '4562136587954',
+                'nombre_importador' => 'SEDFRGTHJKLM,Ñ',
+                'domicilio_importador' => 'DFTGHYJUKL,Ñ',
+                'valor_dolares' => '0',
+                'valor_aduana' => '520000',
+                'precio_pagado_valor_comercial' => '0',
+                'fecha_entrada' => '2026-07-01',
+                'fecha_pago' => '2026-06-29',
+                'clave_seccion_aduanera' => '010',
+                'nombre_aduana_despacho' => 'TIJUANA',
+            ],
+            'partidas' => [
+                [
+                    'fraccion' => '84433291',
+                    'descripcion' => 'Test printer description',
+                    'umc' => '6',
+                    'cantidad_umc' => 1,
+                    'val_adu_usd' => 100,
+                    'contribs' => [
+                        [
+                            'con' => 'IGI',
+                            'tasa' => 0.16,
+                            'tt' => '1',
+                            'fp' => '1',
+                            'importe' => 16.00,
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $response->assertRedirect(route('pedimentos.index'));
+        $this->assertDatabaseHas('pedimentos', [
+            'num_pedimento' => '26 05 1465 111111',
+        ]);
+        $this->assertDatabaseHas('contribuciones_partida', [
+            'contribucion' => 'IGI',
+            'tasa' => 0.16,
+            'tipo_tasa' => '1',
+        ]);
+    }
 }
