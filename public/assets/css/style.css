@@ -8,9 +8,9 @@
 
 /* --- Variables de color -------------------------------- */
 :root {
-    --verde: #10b981;
-    --verde-dark: #059669;
-    --verde-light: rgba(16, 185, 129, 0.15);
+    --verde: #38bdf8;         /* Azul Claro / Sky Blue */
+    --verde-dark: #0284c7;    /* Azul Medio */
+    --verde-light: rgba(56, 189, 248, 0.18);
     --rojo: #ef4444;
     --azul-dark: #374151;
     --azul-navy: #1f2937;
@@ -29,7 +29,7 @@
     --login-label: #ffffff;
     --bg-alt: rgba(17, 24, 39, 0.5);
 
-    /* Variables de pedimentos locales (show.blade.php y _form.blade.php se mapean a estas por defecto) */
+    /* Variables de pedimentos locales */
     --adu-dark: #1e293b;
     --adu-blue: #38bdf8;
     --adu-gold: #fde047;
@@ -39,6 +39,9 @@
 }
 
 html.light-mode {
+    --verde: #0284c7;         /* Azul Claro / Sky Blue en modo claro */
+    --verde-dark: #0369a1;    /* Azul Oscuro */
+    --verde-light: rgba(2, 132, 199, 0.15);
     --azul-dark: #e5e7eb;
     --azul-navy: #f3f4f6;
     --bg: #f8fafc;
@@ -533,12 +536,23 @@ body, .card, .dashboard-header, .navbar-uptex, .card-aduanal, .table, .table td,
 }
 
 /* =====================================================
-   ESTILOS DE FORMULARIO - DARK MODE GLOBALES
+   ESTILOS DE FORMULARIO - DARK & LIGHT MODE GLOBALES
    ===================================================== */
 .form-control, .form-select, .form-control:focus, .form-select:focus {
     background-color: var(--input-bg) !important;
     color: var(--text) !important;
     border-color: var(--border-color) !important;
+}
+
+.input-group-text {
+    background-color: var(--border-color) !important;
+    color: var(--text) !important;
+    border-color: var(--border-color) !important;
+}
+
+.form-control::placeholder, input::placeholder, textarea::placeholder {
+    color: var(--muted) !important;
+    opacity: 0.85 !important;
 }
 
 .form-control:read-only, .form-control:disabled {
@@ -556,10 +570,49 @@ input:-webkit-autofill:active{
     -webkit-text-fill-color: var(--text) !important;
 }
 
+/* --- OVERRIDES DE COLORES VERDES POR AZUL CLARO EN BOOTSTRAP --- */
+.btn-success, .btn-success:disabled {
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active {
+    background-color: #0369a1 !important;
+    border-color: #0369a1 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-success {
+    color: var(--verde) !important;
+    border-color: var(--verde) !important;
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus, .btn-outline-success:active, .btn-outline-success.active {
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.bg-success {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.text-success {
+    color: var(--verde) !important;
+}
+
+.alert-success {
+    background-color: rgba(56, 189, 248, 0.15) !important;
+    border-color: var(--verde) !important;
+    color: var(--text) !important;
+}
+
 /* =====================================================
    DARK MODE INLINE OVERRIDES (Limpia estilos duros oscuros)
    ===================================================== */
-[style*="background:#fff"], [style*="background: #fff"], .card, .dashboard-header, .navbar-uptex, .card-aduanal {
+[style*="background:#fff"], [style*="background: #fff"], [style*="background: var(--card-bg"], .card, .dashboard-header, .navbar-uptex, .card-aduanal {
     background-color: var(--white) !important; /* Tarjetas base */
 }
 
@@ -603,7 +656,7 @@ input:-webkit-autofill:active{
     color: var(--rojo) !important; /* Mantiene rojo legible */
 }
 
-.form-label, .form-text, .badge-apendice, 
+.form-label, label, .form-text, .badge-apendice, 
 .lbl-s, .val-s, .lbl-inline, .val-inline, .sec-header {
     color: var(--text) !important;
 }

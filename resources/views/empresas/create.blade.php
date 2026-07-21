@@ -5,7 +5,7 @@
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h2 class="fw-bold mb-1" style="color: var(--text-color, #1a365d);">
+        <h2 class="fw-bold mb-1">
             <i class="bi bi-building-add me-2"></i>Alta y Registro de Empresa
         </h2>
         <p class="text-muted mb-0">Ingresa la información requerida para registrar una empresa en el sistema</p>
@@ -21,7 +21,7 @@
             <div class="card-header-adu">
                 <i class="bi bi-file-earmark-text-fill"></i> Formulario de Registro de Empresa
             </div>
-            <div class="p-4" style="background: var(--card-bg, #fff);">
+            <div class="p-4">
                 <form method="POST" action="{{ route('empresas.store') }}">
                     @csrf
 
