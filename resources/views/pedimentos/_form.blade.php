@@ -394,23 +394,28 @@
                     @if(!empty($empresasRegistradas) && count($empresasRegistradas) > 0)
                     <div class="col-12 mb-2">
                         <label class="form-label text-primary fw-bold">
-                            <i class="bi bi-building-add me-1"></i> Cargar datos desde Mis Empresas Registradas
+                            <i class="bi bi-building-fill-add me-1"></i> Seleccionar Empresa Registrada para Importador / Exportador
                         </label>
-                        <select id="selectEmpresaRegistrada" class="form-select border-primary" style="background-color: var(--bg-alt);">
-                            <option value="">— Seleccionar de mis empresas registradas —</option>
-                            @foreach($empresasRegistradas as $emp)
-                                <option value="{{ $emp->id }}"
-                                        data-nombre="{{ $emp->nombre }}"
-                                        data-razon="{{ $emp->razon_social }}"
-                                        data-rfc="{{ $emp->rfc }}"
-                                        data-id-fiscal="{{ $emp->id_fiscal }}"
-                                        data-domicilio="{{ $emp->domicilio }}"
-                                        data-pais="{{ $emp->pais }}"
-                                        data-tipo="{{ $emp->tipo }}">
-                                    {{ $emp->nombre }} ({{ $emp->razon_social }}) — {{ $emp->tipo }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="input-group">
+                            <select id="selectEmpresaRegistrada" class="form-select border-primary" style="background-color: var(--bg-alt);">
+                                <option value="">— Seleccionar de mis empresas registradas —</option>
+                                @foreach($empresasRegistradas as $emp)
+                                    <option value="{{ $emp->id }}"
+                                            data-nombre="{{ $emp->nombre }}"
+                                            data-razon="{{ $emp->razon_social }}"
+                                            data-rfc="{{ $emp->rfc }}"
+                                            data-id-fiscal="{{ $emp->id_fiscal }}"
+                                            data-domicilio="{{ $emp->domicilio }}"
+                                            data-pais="{{ $emp->pais }}"
+                                            data-tipo="{{ $emp->tipo }}">
+                                        {{ $emp->nombre }} ({{ $emp->razon_social }}) — {{ $emp->tipo }} [{{ $emp->rfc ?? $emp->id_fiscal }}]
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button type="button" id="btnCargarEmpresaImportador" class="btn btn-primary fw-bold">
+                                <i class="bi bi-check-circle-fill me-1"></i> Usar Empresa Seleccionada
+                            </button>
+                        </div>
                     </div>
                     @endif
 
@@ -558,11 +563,43 @@
             </div>
 
             {{-- ── 6. PROVEEDOR / COMPRADOR ─────────────────────────────────── --}}
-            <div class="sec-header">
+            <div class="sec-header d-flex align-items-center justify-content-between">
                 <span><i class="bi bi-shop me-1"></i> Datos del Proveedor / Comprador</span>
+                @if(!empty($empresasRegistradas) && count($empresasRegistradas) > 0)
+                    <span class="badge bg-info text-dark font-normal" style="font-size: .75rem; text-transform: none;">
+                        <i class="bi bi-building-check me-1"></i> {{ count($empresasRegistradas) }} empresa(s) disponible(s)
+                    </span>
+                @endif
             </div>
             <div class="sec-body">
                 <div class="row g-2">
+                    @if(!empty($empresasRegistradas) && count($empresasRegistradas) > 0)
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-primary fw-bold">
+                            <i class="bi bi-building-fill-down me-1"></i> Seleccionar Empresa Registrada para Proveedor / Comprador
+                        </label>
+                        <div class="input-group">
+                            <select id="selectEmpresaProveedor" class="form-select border-primary" style="background-color: var(--bg-alt);">
+                                <option value="">— Seleccionar de mis empresas registradas —</option>
+                                @foreach($empresasRegistradas as $emp)
+                                    <option value="{{ $emp->id }}"
+                                            data-nombre="{{ $emp->nombre }}"
+                                            data-razon="{{ $emp->razon_social }}"
+                                            data-rfc="{{ $emp->rfc }}"
+                                            data-id-fiscal="{{ $emp->id_fiscal }}"
+                                            data-domicilio="{{ $emp->domicilio }}"
+                                            data-pais="{{ $emp->pais }}"
+                                            data-tipo="{{ $emp->tipo }}">
+                                        {{ $emp->nombre }} ({{ $emp->razon_social }}) — {{ $emp->tipo }} [{{ $emp->id_fiscal ?? $emp->rfc }}]
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button type="button" id="btnCargarEmpresaProveedor" class="btn btn-primary fw-bold">
+                                <i class="bi bi-check-circle-fill me-1"></i> Usar Empresa Seleccionada
+                            </button>
+                        </div>
+                    </div>
+                    @endif
                     <div class="col-md-3">
                         <label class="form-label">ID Fiscal (RFC / Tax ID)</label>
                         <input type="text" name="proveedor[id_fiscal]" class="form-control fc"
@@ -1725,10 +1762,19 @@ document.addEventListener('DOMContentLoaded', function () {
         .reduce((s, el) => s + (parseFloat(el.value) || 0), 0);
 
     // ── 1. Referencia desde Iniciales de Empresa Registrada (1ra letra de 2 primeras palabras) + Ops. Año / Pedimento Año ──
-    const proveedorNombreInput = document.querySelector('[name="proveedor[nombre]"]');
-    const importadorNombreInput = document.querySelector('[name="pedimento[nombre_importador]"]');
-    const selectEmpresa = document.getElementById('selectEmpresaRegistrada');
-    const campoReferencia = document.getElementById('campoReferencia');
+    const proveedorNombreInput   = document.querySelector('[name="proveedor[nombre]"]');
+    const proveedorIdFiscalInput = document.querySelector('[name="proveedor[id_fiscal]"]');
+    const proveedorDomInput      = document.querySelector('[name="proveedor[domicilio]"]');
+
+    const importadorNombreInput  = document.querySelector('[name="pedimento[nombre_importador]"]');
+    const importadorRfcInput     = document.querySelector('[name="pedimento[rfc_importador]"]');
+    const importadorDomInput     = document.querySelector('[name="pedimento[domicilio_importador]"]');
+
+    const selectEmpresaImportador = document.getElementById('selectEmpresaRegistrada');
+    const selectEmpresaProveedor  = document.getElementById('selectEmpresaProveedor');
+    const btnCargarImportador     = document.getElementById('btnCargarEmpresaImportador');
+    const btnCargarProveedor      = document.getElementById('btnCargarEmpresaProveedor');
+    const campoReferencia         = document.getElementById('campoReferencia');
 
     const totalOpsAnio = '{{ str_pad($totalOperacionesAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
     const numPedAnio   = '{{ str_pad($numPedimentoAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
@@ -1754,43 +1800,59 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!campoReferencia) return;
 
         let rawName = '';
-        if (selectEmpresa && selectEmpresa.selectedIndex > 0) {
-            const opt = selectEmpresa.options[selectEmpresa.selectedIndex];
+        if (selectEmpresaProveedor && selectEmpresaProveedor.selectedIndex > 0) {
+            const opt = selectEmpresaProveedor.options[selectEmpresaProveedor.selectedIndex];
+            rawName = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
+        }
+        if (!rawName && selectEmpresaImportador && selectEmpresaImportador.selectedIndex > 0) {
+            const opt = selectEmpresaImportador.options[selectEmpresaImportador.selectedIndex];
             rawName = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
         }
         if (!rawName) {
-            rawName = (importadorNombreInput?.value || proveedorNombreInput?.value || '').trim();
+            rawName = (proveedorNombreInput?.value || importadorNombreInput?.value || '').trim();
         }
 
         const prefix = getEmpresaInitials(rawName);
         campoReferencia.value = prefix + totalOpsAnio + '/' + numPedAnio;
     }
 
-    // Listener para autocompletar al seleccionar empresa registrada
-    if (selectEmpresa) {
-        selectEmpresa.addEventListener('change', function() {
-            const opt = this.options[this.selectedIndex];
-            if (opt && opt.value) {
-                const nombre = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
-                const rfc = opt.getAttribute('data-rfc') || '';
-                const domicilio = opt.getAttribute('data-domicilio') || '';
-                const idFiscal = opt.getAttribute('data-id-fiscal') || '';
+    function cargarDatosEmpresa(selectElement, target) {
+        if (!selectElement || selectElement.selectedIndex <= 0) return;
+        const opt = selectElement.options[selectElement.selectedIndex];
+        if (!opt || !opt.value) return;
 
-                const importadorRfc = document.querySelector('[name="pedimento[rfc_importador]"]');
-                const importadorDom = document.querySelector('[name="pedimento[domicilio_importador]"]');
-                const proveedorIdFiscal = document.querySelector('[name="proveedor[id_fiscal]"]');
-                const proveedorDom = document.querySelector('[name="proveedor[domicilio]"]');
+        const nombre = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
+        const rfc = opt.getAttribute('data-rfc') || opt.getAttribute('data-id-fiscal') || '';
+        const idFiscal = opt.getAttribute('data-id-fiscal') || opt.getAttribute('data-rfc') || '';
+        const domicilio = opt.getAttribute('data-domicilio') || '';
 
-                if (importadorNombreInput) importadorNombreInput.value = nombre;
-                if (importadorRfc && rfc) importadorRfc.value = rfc;
-                if (importadorDom && domicilio) importadorDom.value = domicilio;
+        if (target === 'importador' || target === 'ambos') {
+            if (importadorNombreInput) importadorNombreInput.value = nombre;
+            if (importadorRfcInput) importadorRfcInput.value = rfc;
+            if (importadorDomInput) importadorDomInput.value = domicilio;
+        }
 
-                if (proveedorNombreInput && !proveedorNombreInput.value) proveedorNombreInput.value = nombre;
-                if (proveedorIdFiscal && idFiscal && !proveedorIdFiscal.value) proveedorIdFiscal.value = idFiscal;
-                if (proveedorDom && domicilio && !proveedorDom.value) proveedorDom.value = domicilio;
-            }
-            calcReferencia();
-        });
+        if (target === 'proveedor' || target === 'ambos') {
+            if (proveedorNombreInput) proveedorNombreInput.value = nombre;
+            if (proveedorIdFiscalInput) proveedorIdFiscalInput.value = idFiscal;
+            if (proveedorDomInput) proveedorDomInput.value = domicilio;
+        }
+
+        calcReferencia();
+    }
+
+    if (selectEmpresaImportador) {
+        selectEmpresaImportador.addEventListener('change', () => cargarDatosEmpresa(selectEmpresaImportador, 'importador'));
+    }
+    if (btnCargarImportador) {
+        btnCargarImportador.addEventListener('click', () => cargarDatosEmpresa(selectEmpresaImportador, 'importador'));
+    }
+
+    if (selectEmpresaProveedor) {
+        selectEmpresaProveedor.addEventListener('change', () => cargarDatosEmpresa(selectEmpresaProveedor, 'proveedor'));
+    }
+    if (btnCargarProveedor) {
+        btnCargarProveedor.addEventListener('click', () => cargarDatosEmpresa(selectEmpresaProveedor, 'proveedor'));
     }
 
     proveedorNombreInput?.addEventListener('input', calcReferencia);
