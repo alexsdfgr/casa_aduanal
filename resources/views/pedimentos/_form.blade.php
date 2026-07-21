@@ -381,11 +381,39 @@
             </div>
 
             {{-- ── 3. IMPORTADOR / EXPORTADOR ──────────────────────────────── --}}
-            <div class="sec-header">
-                <span><i class="bi bi-building me-1"></i> Datos del Importador / Exportador</span>
+            <div class="sec-header d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-building me-1"></i> Datos del Importador / Exportador (Empresa)</span>
+                @if(!empty($empresasRegistradas) && count($empresasRegistradas) > 0)
+                    <span class="badge bg-info text-dark font-normal" style="font-size: .75rem; text-transform: none;">
+                        <i class="bi bi-building-check me-1"></i> {{ count($empresasRegistradas) }} empresa(s) disponible(s)
+                    </span>
+                @endif
             </div>
             <div class="sec-body">
                 <div class="row g-2">
+                    @if(!empty($empresasRegistradas) && count($empresasRegistradas) > 0)
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-primary fw-bold">
+                            <i class="bi bi-building-add me-1"></i> Cargar datos desde Mis Empresas Registradas
+                        </label>
+                        <select id="selectEmpresaRegistrada" class="form-select border-primary" style="background-color: var(--bg-alt);">
+                            <option value="">— Seleccionar de mis empresas registradas —</option>
+                            @foreach($empresasRegistradas as $emp)
+                                <option value="{{ $emp->id }}"
+                                        data-nombre="{{ $emp->nombre }}"
+                                        data-razon="{{ $emp->razon_social }}"
+                                        data-rfc="{{ $emp->rfc }}"
+                                        data-id-fiscal="{{ $emp->id_fiscal }}"
+                                        data-domicilio="{{ $emp->domicilio }}"
+                                        data-pais="{{ $emp->pais }}"
+                                        data-tipo="{{ $emp->tipo }}">
+                                    {{ $emp->nombre }} ({{ $emp->razon_social }}) — {{ $emp->tipo }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
+
                     <div class="col-md-3">
                         <label class="form-label">RFC <span class="text-danger">*</span></label>
                         <input type="text" name="pedimento[rfc_importador]"
@@ -1696,41 +1724,73 @@ document.addEventListener('DOMContentLoaded', function () {
     const sumClass = cls => [...document.querySelectorAll('.' + cls)]
         .reduce((s, el) => s + (parseFloat(el.value) || 0), 0);
 
-    // ── 1. Referencia desde Proveedor/Cliente + Ops. Año / Pedimento Año ──
+    // ── 1. Referencia desde Iniciales de Empresa Registrada (1ra letra de 2 primeras palabras) + Ops. Año / Pedimento Año ──
     const proveedorNombreInput = document.querySelector('[name="proveedor[nombre]"]');
     const importadorNombreInput = document.querySelector('[name="pedimento[nombre_importador]"]');
+    const selectEmpresa = document.getElementById('selectEmpresaRegistrada');
     const campoReferencia = document.getElementById('campoReferencia');
 
     const totalOpsAnio = '{{ str_pad($totalOperacionesAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
     const numPedAnio   = '{{ str_pad($numPedimentoAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
 
+    function getEmpresaInitials(name) {
+        if (!name) return 'IV';
+        // Extraer palabras quitando caracteres especiales
+        const words = name.trim().split(/\s+/).map(w => w.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '')).filter(w => w.length > 0);
+        if (words.length >= 2) {
+            // Toma la primera letra de las dos primeras palabras del nombre de la empresa
+            return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+        } else if (words.length === 1) {
+            if (words[0].length >= 2) {
+                return words[0].substring(0, 2).toUpperCase();
+            } else if (words[0].length === 1) {
+                return (words[0].charAt(0) + 'X').toUpperCase();
+            }
+        }
+        return 'IV';
+    }
+
     function calcReferencia() {
         if (!campoReferencia) return;
 
-        const rawName = (proveedorNombreInput?.value || importadorNombreInput?.value || '').trim();
-        let prefix = 'IV';
-
-        if (rawName.length > 0) {
-            const words = rawName.split(/\s+/).filter(w => w.length > 0);
-            if (words.length >= 2) {
-                const w1 = words[0].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
-                const w2 = words[1].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
-                if (w1.length > 0 && w2.length > 0) {
-                    prefix = (w1.charAt(0) + w2.charAt(0)).toUpperCase();
-                } else if (w1.length >= 2) {
-                    prefix = w1.substring(0, 2).toUpperCase();
-                }
-            } else if (words.length === 1) {
-                const w1 = words[0].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
-                if (w1.length >= 2) {
-                    prefix = w1.substring(0, 2).toUpperCase();
-                } else if (w1.length === 1) {
-                    prefix = (w1.charAt(0) + 'X').toUpperCase();
-                }
-            }
+        let rawName = '';
+        if (selectEmpresa && selectEmpresa.selectedIndex > 0) {
+            const opt = selectEmpresa.options[selectEmpresa.selectedIndex];
+            rawName = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
+        }
+        if (!rawName) {
+            rawName = (importadorNombreInput?.value || proveedorNombreInput?.value || '').trim();
         }
 
+        const prefix = getEmpresaInitials(rawName);
         campoReferencia.value = prefix + totalOpsAnio + '/' + numPedAnio;
+    }
+
+    // Listener para autocompletar al seleccionar empresa registrada
+    if (selectEmpresa) {
+        selectEmpresa.addEventListener('change', function() {
+            const opt = this.options[this.selectedIndex];
+            if (opt && opt.value) {
+                const nombre = opt.getAttribute('data-nombre') || opt.getAttribute('data-razon') || '';
+                const rfc = opt.getAttribute('data-rfc') || '';
+                const domicilio = opt.getAttribute('data-domicilio') || '';
+                const idFiscal = opt.getAttribute('data-id-fiscal') || '';
+
+                const importadorRfc = document.querySelector('[name="pedimento[rfc_importador]"]');
+                const importadorDom = document.querySelector('[name="pedimento[domicilio_importador]"]');
+                const proveedorIdFiscal = document.querySelector('[name="proveedor[id_fiscal]"]');
+                const proveedorDom = document.querySelector('[name="proveedor[domicilio]"]');
+
+                if (importadorNombreInput) importadorNombreInput.value = nombre;
+                if (importadorRfc && rfc) importadorRfc.value = rfc;
+                if (importadorDom && domicilio) importadorDom.value = domicilio;
+
+                if (proveedorNombreInput && !proveedorNombreInput.value) proveedorNombreInput.value = nombre;
+                if (proveedorIdFiscal && idFiscal && !proveedorIdFiscal.value) proveedorIdFiscal.value = idFiscal;
+                if (proveedorDom && domicilio && !proveedorDom.value) proveedorDom.value = domicilio;
+            }
+            calcReferencia();
+        });
     }
 
     proveedorNombreInput?.addEventListener('input', calcReferencia);

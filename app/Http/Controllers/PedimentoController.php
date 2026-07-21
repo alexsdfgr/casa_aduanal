@@ -61,8 +61,9 @@ class PedimentoController extends Controller
         $year = date('Y');
         $totalOperacionesAnio = Pedimento::whereYear('created_at', $year)->count() + 1;
         $numPedimentoAnio   = Pedimento::where('usuario_id', Auth::id())->whereYear('created_at', $year)->count() + 1;
+        $empresasRegistradas = \App\Models\Empresa::where('usuario_id', Auth::id())->orderBy('nombre')->get();
 
-        return view('pedimentos.create', compact('totalOperacionesAnio', 'numPedimentoAnio'));
+        return view('pedimentos.create', compact('totalOperacionesAnio', 'numPedimentoAnio', 'empresasRegistradas'));
     }
 
     // ── STORE ─────────────────────────────────────────────────────────────
@@ -255,7 +256,9 @@ class PedimentoController extends Controller
         if ($totalOperacionesAnio === 0) $totalOperacionesAnio = 1;
         if ($numPedimentoAnio === 0) $numPedimentoAnio = 1;
 
-        return view('pedimentos.edit', compact('pedimento', 'totalOperacionesAnio', 'numPedimentoAnio'));
+        $empresasRegistradas = \App\Models\Empresa::where('usuario_id', $pedimento->usuario_id)->orderBy('nombre')->get();
+
+        return view('pedimentos.edit', compact('pedimento', 'totalOperacionesAnio', 'numPedimentoAnio', 'empresasRegistradas'));
     }
 
     // ── UPDATE ────────────────────────────────────────────────────────────
