@@ -186,7 +186,7 @@
         <div class="card-adu-header">
             <strong><i class="bi bi-file-earmark-text me-1"></i> REGISTRAR NUEVO PEDIMENTO</strong>
             <span class="ref">
-                Completa los datos del pedimento · Anexo 22 RGCE 2024
+                Completa los datos del pedimento
                 &nbsp;·&nbsp;
                 <span style="color:#7dd3fc;font-size:.68rem"><i class="bi bi-gear-fill me-1"></i>⚙ = calculado automáticamente</span>
             </span>
