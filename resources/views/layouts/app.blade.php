@@ -62,6 +62,10 @@
                         class="{{ request()->routeIs('pedimentos.index') ? 'active' : '' }}">
                         <i class="bi bi-file-earmark-text me-1"></i>Mis Pedimentos
                     </a></li>
+                <li><a href="{{ route('empresas.index') }}"
+                        class="{{ request()->routeIs('empresas.*') ? 'active' : '' }}">
+                        <i class="bi bi-building me-1"></i>Empresas
+                    </a></li>
             @endif
 
             <li>

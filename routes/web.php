@@ -5,6 +5,7 @@ use App\Http\Controllers\PedimentoController;
 use App\Http\Controllers\PartidaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\EmpresaController;
 use Illuminate\Support\Facades\Route;
 
 // ── Login / Logout ────────────────────────────────────────
@@ -38,4 +39,8 @@ Route::middleware('auth')->group(function () {
     // Grupos
     Route::resource('grupos', GrupoController::class)
         ->only(['index', 'store', 'destroy']);
+
+    // Empresas
+    Route::resource('empresas', EmpresaController::class)
+        ->except(['show', 'edit', 'update']);
 });

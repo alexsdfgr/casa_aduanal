@@ -79,8 +79,11 @@
         <i class="bi bi-check-circle"></i>Pedimentos Aprobados
     </a>
     <a href="{{ route('pedimentos.create') }}" class="card-option">
-    <i class="bi bi-plus-circle"></i>Registrar Pedimento
-</a>
+        <i class="bi bi-plus-circle"></i>Registrar Pedimento
+    </a>
+    <a href="{{ route('empresas.create') }}" class="card-option">
+        <i class="bi bi-building-add"></i>Registrar Empresa
+    </a>
 </div>
 
 <div class="row g-3 mb-4">
