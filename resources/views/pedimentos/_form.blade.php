@@ -211,12 +211,12 @@
                         @error('pedimento.num_pedimento')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-2">
-                        {{-- Referencia: calculada del num_pedimento --}}
+                        {{-- Referencia: calculada del Proveedor/Cliente + Ops. Año / Pedimento Año --}}
                         <label class="form-label label-auto">Referencia <span class="badge-auto">Auto</span></label>
                         <input type="text" name="pedimento[referencia]" id="campoReferencia" class="form-control fc campo-auto"
                                value="{{ old('pedimento.referencia', $p?->referencia) }}" maxlength="30" readonly
-                               title="Se genera automáticamente desde el Núm. Pedimento">
-                        <div class="form-text">Del Núm. Pedimento</div>
+                               title="Se genera automáticamente: 2 letras Proveedor/Cliente + Ops. Año / Pedimento Año (Ej. IV003/001)">
+                        <div class="form-text">Ej: IV003/001</div>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">Tipo Operación <span class="text-danger">*</span></label>
@@ -1696,21 +1696,48 @@ document.addEventListener('DOMContentLoaded', function () {
     const sumClass = cls => [...document.querySelectorAll('.' + cls)]
         .reduce((s, el) => s + (parseFloat(el.value) || 0), 0);
 
-    // ── 1. Referencia desde Núm. Pedimento ──────────────────────
-    const numPedInput = document.querySelector('[name="pedimento[num_pedimento]"]');
+    // ── 1. Referencia desde Proveedor/Cliente + Ops. Año / Pedimento Año ──
+    const proveedorNombreInput = document.querySelector('[name="proveedor[nombre]"]');
+    const importadorNombreInput = document.querySelector('[name="pedimento[nombre_importador]"]');
+    const campoReferencia = document.getElementById('campoReferencia');
+
+    const totalOpsAnio = '{{ str_pad($totalOperacionesAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
+    const numPedAnio   = '{{ str_pad($numPedimentoAnio ?? 1, 3, "0", STR_PAD_LEFT) }}';
+
     function calcReferencia() {
-        const raw = (numPedInput?.value || '').replace(/\s+/g, '');
-        if (raw.length >= 14) {
-            const patente  = raw.substring(4, 8);
-            const folio    = raw.substring(8, 15).replace(/^0+/, '');
-            const anioCort = raw.substring(0, 2);
-            document.getElementById('campoReferencia').value = patente + anioCort + '/' + folio;
-        } else {
-            document.getElementById('campoReferencia').value = '';
+        if (!campoReferencia) return;
+
+        const rawName = (proveedorNombreInput?.value || importadorNombreInput?.value || '').trim();
+        let prefix = 'IV';
+
+        if (rawName.length > 0) {
+            const words = rawName.split(/\s+/).filter(w => w.length > 0);
+            if (words.length >= 2) {
+                const w1 = words[0].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
+                const w2 = words[1].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
+                if (w1.length > 0 && w2.length > 0) {
+                    prefix = (w1.charAt(0) + w2.charAt(0)).toUpperCase();
+                } else if (w1.length >= 2) {
+                    prefix = w1.substring(0, 2).toUpperCase();
+                }
+            } else if (words.length === 1) {
+                const w1 = words[0].replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/g, '');
+                if (w1.length >= 2) {
+                    prefix = w1.substring(0, 2).toUpperCase();
+                } else if (w1.length === 1) {
+                    prefix = (w1.charAt(0) + 'X').toUpperCase();
+                }
+            }
         }
+
+        campoReferencia.value = prefix + totalOpsAnio + '/' + numPedAnio;
     }
-    numPedInput?.addEventListener('input', calcReferencia);
-    calcReferencia();
+
+    proveedorNombreInput?.addEventListener('input', calcReferencia);
+    importadorNombreInput?.addEventListener('input', calcReferencia);
+    if (!campoReferencia?.value) {
+        calcReferencia();
+    }
 
     // ── 1.b Sincronizar Aduana E/S con Clave y Nombre Despacho ──
     const aduanaES = document.getElementById('aduanaES');

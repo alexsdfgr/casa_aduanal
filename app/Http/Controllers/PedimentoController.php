@@ -57,7 +57,12 @@ class PedimentoController extends Controller
             return redirect()->route('pedimentos.index')
                 ->with('error', 'Los profesores solo pueden revisar pedimentos.');
         }
-        return view('pedimentos.create');
+
+        $year = date('Y');
+        $totalOperacionesAnio = Pedimento::whereYear('created_at', $year)->count() + 1;
+        $numPedimentoAnio   = Pedimento::where('usuario_id', Auth::id())->whereYear('created_at', $year)->count() + 1;
+
+        return view('pedimentos.create', compact('totalOperacionesAnio', 'numPedimentoAnio'));
     }
 
     // ── STORE ─────────────────────────────────────────────────────────────
@@ -244,7 +249,13 @@ class PedimentoController extends Controller
             'agente',
         ]);
 
-        return view('pedimentos.edit', compact('pedimento'));
+        $year = $pedimento->created_at ? $pedimento->created_at->format('Y') : date('Y');
+        $totalOperacionesAnio = Pedimento::whereYear('created_at', $year)->count();
+        $numPedimentoAnio   = Pedimento::where('usuario_id', $pedimento->usuario_id)->whereYear('created_at', $year)->count();
+        if ($totalOperacionesAnio === 0) $totalOperacionesAnio = 1;
+        if ($numPedimentoAnio === 0) $numPedimentoAnio = 1;
+
+        return view('pedimentos.edit', compact('pedimento', 'totalOperacionesAnio', 'numPedimentoAnio'));
     }
 
     // ── UPDATE ────────────────────────────────────────────────────────────
