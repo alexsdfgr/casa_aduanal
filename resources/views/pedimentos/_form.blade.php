@@ -1311,77 +1311,30 @@
                 $ap4 = ['A4'=>'A4 – DEU – Alemania','B4'=>'B4 – ARG – Argentina','B5'=>'B5 – AUS – Australia','C2'=>'C2 – BEL – Bélgica','C8'=>'C8 – BRA – Brasil','D9'=>'D9 – CAN – Canadá','F6'=>'F6 – CHL – Chile','Z3'=>'Z3 – CHN – China','E4'=>'E4 – COL – Colombia','F2'=>'F2 – CRI – Costa Rica','G7'=>'G7 – ESP – España','G8'=>'G8 – USA – Estados Unidos','H5'=>'H5 – FRA – Francia','I6'=>'I6 – GTM – Guatemala','J5'=>'J5 – HND – Honduras','J6'=>'J6 – HKG – Hong Kong','J8'=>'J8 – IND – India','J9'=>'J9 – IDN – Indonesia','K6'=>'K6 – ITA – Italia','K9'=>'K9 – JPN – Japón','E8'=>'E8 – KOR – Corea del Sur','N3'=>'N3 – MEX – México','J4'=>'J4 – NLD – Países Bajos','Q8'=>'Q8 – PAN – Panamá','R2'=>'R2 – PER – Perú','R5'=>'R5 – POL – Polonia','R6'=>'R6 – PRT – Portugal','R9'=>'R9 – GBR – Reino Unido','RU'=>'RU – RUS – Rusia','U8'=>'U8 – CHE – Suiza','F7'=>'F7 – TWN – Taiwán','V1'=>'V1 – THA – Tailandia','W4'=>'W4 – TUR – Turquía','W9'=>'W9 – VNM – Vietnam','Z9'=>'Z9 – KCD – No declarado'];
                 $ap12p = ['C.C.'=>'2 – C.C.','IVA'=>'3 – IVA','ISAN'=>'4 – ISAN','IGI/IGE'=>'6 – IGI/IGE','2.5'=>'12 – 2.5','EUR'=>'16 – EUR','MT'=>'20 – MT','IEPS'=>'22 – IEPS','2IB'=>'24 – 2IB','2IA2'=>'25 – 2IA2','2IA1'=>'26 – 2IA1','2IC'=>'27 – 2IC','2IF'=>'28 – 2IF','2IG'=>'29 – 2IG','2IJ'=>'30 – 2IJ','2II'=>'31 – 2II','ICF'=>'32 – ICF','IEPSDIE'=>'33 – IEPSDIE','ICNF'=>'34 – ICNF','LIEPS'=>'35 – LIEPS'];
                 $ap8p = [
-                    'AL' => 'AL – Mercancía originaria importada al amparo de ALADI',
-                    'AR' => 'AR – Consulta arancelaria',
-                    'B2' => 'B2 – Bienes del artículo 2 de la Ley del IEPS',
-                    'CD' => 'CD – Certificado con dispensa temporal',
-                    'CE' => 'CE – Certificado de elegibilidad',
-                    'CF' => 'CF – Preferencia arancelaria para empresas ubicadas en la franja o región fronteriza',
-                    'DC' => 'DC – Clasificación del cupo',
-                    'DH' => 'DH – Datos de importación de hidrocarburos',
                     'DP' => 'DP – Introducción y extracción de depósito fiscal para exposición y venta de artículos promocionales',
                     'DR' => 'DR – Rectificación por discrepancia documental',
                     'DS' => 'DS – Destrucción de mercancías en depósito fiscal para la exposición y venta',
                     'DT' => 'DT – Operaciones sujetas al artículo 2.5 del T-MEC',
-                    'DU' => 'DU – Operaciones sujetas a los arts. 14 del Anexo III de la Decisión, 15 del Anexo I del TLCAELC o al ACC',
-                    'DV' => 'DV – Venta de mercancías a misiones diplomáticas y consulares cuando cuente con franquicia diplomática',
-                    'EA' => 'EA – Excepción de aviso automático de importación/exportación',
-                    'EB' => 'EB – Envases y empaques',
-                    'EC' => 'EC – Excepción de pago de cuota compensatoria',
-                    'EF' => 'EF – Estímulo fiscal',
-                    'EN' => 'EN – No aplicación de la Norma Oficial Mexicana',
-                    'EO' => 'EO – Emisor del certificado de origen',
                     'EP' => 'EP – Excepción de inscripción al padrón de importadores',
                     'ES' => 'ES – Estado de la mercancía',
                     'EX' => 'EX – Exención de cuenta aduanera de garantía',
                     'FC' => 'FC – Fracción correlacionada',
-                    'GA' => 'GA – Cuenta aduanera de garantía',
-                    'GI' => 'GI – Garantía IMMEX',
-                    'HI' => 'HI – Tipo de gasolina',
-                    'IA' => 'IA – Certificado de aprobación para producción de partes aeronáuticas',
                     'IF' => 'IF – Preferencia arancelaria para empresas ubicadas en la región fronteriza de Chetumal',
                     'II' => 'II – Inventario inicial de empresas denominadas Duty Free',
                     'IN' => 'IN – Incidencia',
                     'IS' => 'IS – Mercancías exentas de impuestos al comercio exterior',
                     'LP' => 'LP – Lista de escaso abasto',
-                    'MA' => 'MA – Embalajes de madera',
-                    'MB' => 'MB – Marbetes y/o precintos',
-                    'MC' => 'MC – Marca',
                     'ME' => 'ME – Material de ensamble',
                     'MM' => 'MM – Importación definitiva de muestras y muestrarios',
-                    'MR' => 'MR – Registro para la toma de muestras, peligrosas o para las que se requiera de instalaciones o equipos especiales para la toma de las mismas',
+                    'MR' => 'MR – Registro para la toma de muestras, peligrosas o que requieran instalaciones o equipos especiales',
                     'MV' => 'MV – Año-modelo del vehículo',
                     'NA' => 'NA – Mercancías con preferencia arancelaria ALADI señaladas en el Acuerdo',
-                    'NE' => 'NE – Excepción de cumplir con el Anexo 21',
-                    'NS' => 'NS – Excepción de inscripción en los padrones de importadores y exportadores-sectoriales',
                     'NT' => 'NT – Nota de Tratado',
                     'NZ' => 'NZ – Mercancía que no se ha beneficiado del "Sugar Re-Export Program" de los Estados Unidos de América',
-                    'OM' => 'OM – Mercancía originaria de México',
-                    'OV' => 'OV – Operación vulnerable',
-                    'PA' => 'PA – Cumplimiento de la Norma Oficial Mexicana, para verificarse en un almacén general de depósito autorizado',
-                    'PB' => 'PB – Cumplimiento de NOM para su verificación dentro del territorio nacional, en un domicilio particular',
-                    'PG' => 'PG – Mercancía peligrosa',
-                    'PM' => 'PM – Presentación de la mercancía',
-                    'PO' => 'PO – Proveedor de origen',
-                    'PR' => 'PR – Proporción determinada',
-                    'PS' => 'PS – Sector autorizado al amparo de PROSEC',
-                    'PT' => 'PT – Exportación o retorno de producto terminado',
-                    'PV' => 'PV – Prueba de valor',
-                    'RA' => 'RA – Retorno de racks',
-                    'RF' => 'RF – Cuota compensatoria basada en precios de referencia',
-                    'RP' => 'RP – Retorno de residuos peligrosos generados por empresas con programa IMMEX',
-                    'SB' => 'SB – Importación de organismos genéticamente modificados',
-                    'SC' => 'SC – Excepción de pago de medida de transición',
-                    'SH' => 'SH – Autorización del SAT',
-                    'SM' => 'SM – Excepción de la declaración de marbetes',
-                    'TA' => 'TA – Régimen de transición alternativo',
                     'TB' => 'TB – Tránsito interno por aduanas y mercancías específicas',
                     'TC' => 'TC – Correlación de las fracciones arancelarias',
                     'TL' => 'TL – Mercancía originaria al amparo de Tratados de Libre Comercio',
-                    'TV' => 'TV – Total de mercancía extraída de depósito fiscal',
-                    'UM' => 'UM – Uso de la mercancía',
-                    'VT' => 'VT – Importación de autobuses, camiones y tractocamiones usados para el transporte de personas y mercancías',
-                    'XP' => 'XP – Excepción al cumplimiento de regulaciones y restricciones no arancelarias',
+                    'VT' => 'VT – Importación de autobuses, camiones y tractocamiones usados',
                     'ZC' => 'ZC – Contenido de azúcar',
                 ];
                 $partidas = old('partidas', $p?->partidas?->toArray() ?? []);
@@ -2185,77 +2138,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // Catálogos para JS
     const AP12P_keys = ['C.C.','IVA','ISAN','IGI/IGE','2.5','EUR','MT','IEPS','2IB','2IA2','2IA1','2IC','2IF','2IG','2IJ','2II','ICF','IEPSDIE','ICNF','LIEPS'];
     const AP8P_keys  = {
-        'AL': 'Mercancía originaria importada al amparo de ALADI',
-        'AR': 'Consulta arancelaria',
-        'B2': 'Bienes del artículo 2 de la Ley del IEPS',
-        'CD': 'Certificado con dispensa temporal',
-        'CE': 'Certificado de elegibilidad',
-        'CF': 'Preferencia arancelaria para empresas ubicadas en la franja o región fronteriza',
-        'DC': 'Clasificación del cupo',
-        'DH': 'Datos de importación de hidrocarburos',
         'DP': 'Introducción y extracción de depósito fiscal para exposición y venta de artículos promocionales',
         'DR': 'Rectificación por discrepancia documental',
         'DS': 'Destrucción de mercancías en depósito fiscal para la exposición y venta',
         'DT': 'Operaciones sujetas al artículo 2.5 del T-MEC',
-        'DU': 'Operaciones sujetas a los arts. 14 del Anexo III de la Decisión, 15 del Anexo I del TLCAELC o al ACC',
-        'DV': 'Venta de mercancías a misiones diplomáticas y consulares cuando cuente con franquicia diplomática',
-        'EA': 'Excepción de aviso automático de importación/exportación',
-        'EB': 'Envases y empaques',
-        'EC': 'Excepción de pago de cuota compensatoria',
-        'EF': 'Estímulo fiscal',
-        'EN': 'No aplicación de la Norma Oficial Mexicana',
-        'EO': 'Emisor del certificado de origen',
         'EP': 'Excepción de inscripción al padrón de importadores',
         'ES': 'Estado de la mercancía',
         'EX': 'Exención de cuenta aduanera de garantía',
         'FC': 'Fracción correlacionada',
-        'GA': 'Cuenta aduanera de garantía',
-        'GI': 'Garantía IMMEX',
-        'HI': 'Tipo de gasolina',
-        'IA': 'Certificado de aprobación para producción de partes aeronáuticas',
         'IF': 'Preferencia arancelaria para empresas ubicadas en la región fronteriza de Chetumal',
         'II': 'Inventario inicial de empresas denominadas Duty Free',
         'IN': 'Incidencia',
         'IS': 'Mercancías exentas de impuestos al comercio exterior',
         'LP': 'Lista de escaso abasto',
-        'MA': 'Embalajes de madera',
-        'MB': 'Marbetes y/o precintos',
-        'MC': 'Marca',
         'ME': 'Material de ensamble',
         'MM': 'Importación definitiva de muestras y muestrarios',
-        'MR': 'Registro para la toma de muestras, peligrosas o para las que se requiera de instalaciones o equipos especiales para la toma de las mismas',
+        'MR': 'Registro para la toma de muestras, peligrosas o que requieran instalaciones o equipos especiales',
         'MV': 'Año-modelo del vehículo',
         'NA': 'Mercancías con preferencia arancelaria ALADI señaladas en el Acuerdo',
-        'NE': 'Excepción de cumplir con el Anexo 21',
-        'NS': 'Excepción de inscripción en los padrones de importadores y exportadores-sectoriales',
         'NT': 'Nota de Tratado',
         'NZ': 'Mercancía que no se ha beneficiado del "Sugar Re-Export Program" de los Estados Unidos de América',
-        'OM': 'Mercancía originaria de México',
-        'OV': 'Operación vulnerable',
-        'PA': 'Cumplimiento de la Norma Oficial Mexicana, para verificarse en un almacén general de depósito autorizado',
-        'PB': 'Cumplimiento de NOM para su verificación dentro del territorio nacional, en un domicilio particular',
-        'PG': 'Mercancía peligrosa',
-        'PM': 'Presentación de la mercancía',
-        'PO': 'Proveedor de origen',
-        'PR': 'Proporción determinada',
-        'PS': 'Sector autorizado al amparo de PROSEC',
-        'PT': 'Exportación o retorno de producto terminado',
-        'PV': 'Prueba de valor',
-        'RA': 'Retorno de racks',
-        'RF': 'Cuota compensatoria basada en precios de referencia',
-        'RP': 'Retorno de residuos peligrosos generados por empresas con programa IMMEX',
-        'SB': 'Importación de organismos genéticamente modificados',
-        'SC': 'Excepción de pago de medida de transición',
-        'SH': 'Autorización del SAT',
-        'SM': 'Excepción de la declaración de marbetes',
-        'TA': 'Régimen de transición alternativo',
         'TB': 'Tránsito interno por aduanas y mercancías específicas',
         'TC': 'Correlación de las fracciones arancelarias',
         'TL': 'Mercancía originaria al amparo de Tratados de Libre Comercio',
-        'TV': 'Total de mercancía extraída de depósito fiscal',
-        'UM': 'Uso de la mercancía',
-        'VT': 'Importación de autobuses, camiones y tractocamiones usados para el transporte de personas y mercancías',
-        'XP': 'Excepción al cumplimiento de regulaciones y restricciones no arancelarias',
+        'VT': 'Importación de autobuses, camiones y tractocamiones usados',
         'ZC': 'Contenido de azúcar'
     };
 
@@ -2740,36 +2646,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const rule = RULES_IDENT_PARTIDA[clave];
 
         ['c1', 'c2', 'c3'].forEach(cKey => {
-            const inp = tr.querySelector(`.ip-${cKey}`);
-            if (!inp) return;
+            const elInp = tr.querySelector(`.ip-${cKey}`);
+            if (!elInp) return;
 
-            const cRule = rule ? rule[cKey] : { enabled: true, ph: '' };
+            const cell = elInp.parentElement;
+            const currentVal = elInp.value || '';
+            const inputName = elInp.name || '';
+            const cRule = rule ? rule[cKey] : { enabled: false };
 
             if (!cRule || !cRule.enabled) {
-                inp.value = '';
-                inp.placeholder = 'No asentar datos. (Vacío)';
-                inp.disabled = true;
-                inp.readOnly = true;
-                inp.style.backgroundColor = 'rgba(100, 116, 139, 0.12)';
-                inp.style.opacity = '0.5';
-                inp.style.cursor = 'not-allowed';
-                inp.removeAttribute('list');
-                inp.removeAttribute('title');
+                cell.innerHTML = `<input type="text" name="${inputName}" class="form-control form-control-sm fc border-0 ip-${cKey}" value="" disabled readonly placeholder="No asentar datos. (Vacío)" style="background-color: rgba(100, 116, 139, 0.12); opacity: 0.5; cursor: not-allowed;">`;
+            } else if (cRule.type === 'select' && cRule.options) {
+                let optionsHtml = `<option value="">— ${cRule.ph || 'Seleccionar'} —</option>`;
+                cRule.options.forEach(opt => {
+                    const optVal = typeof opt === 'object' ? opt.v : opt;
+                    const optLbl = typeof opt === 'object' ? opt.l : opt;
+                    const selected = (currentVal === optVal) ? 'selected' : '';
+                    optionsHtml += `<option value="${optVal}" ${selected}>${optLbl}</option>`;
+                });
+                cell.innerHTML = `<select name="${inputName}" class="form-select form-select-sm border-0 ip-${cKey}" style="font-size: .75rem;">${optionsHtml}</select>`;
             } else {
-                inp.disabled = false;
-                inp.readOnly = false;
-                inp.style.backgroundColor = '';
-                inp.style.opacity = '1';
-                inp.style.cursor = '';
-                inp.placeholder = cRule.ph || '';
-
-                if (cRule.options && cRule.options.length > 0) {
-                    inp.setAttribute('list', `list_ip_${clave}_${cKey}`);
-                    inp.title = 'Opciones sugeridas: ' + cRule.options.join(', ');
-                } else {
-                    inp.removeAttribute('list');
-                    inp.removeAttribute('title');
-                }
+                cell.innerHTML = `<input type="text" name="${inputName}" class="form-control form-control-sm fc border-0 ip-${cKey}" value="${currentVal}" placeholder="${cRule.ph || ''}" maxlength="100">`;
             }
         });
     }
