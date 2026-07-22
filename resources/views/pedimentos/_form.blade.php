@@ -2619,21 +2619,169 @@ document.addEventListener('DOMContentLoaded', function () {
                 const td = document.createElement('td');
                 const inp = document.createElement('input');
                 inp.type='text'; inp.name=`partidas[${pi}][idents][${ii}][${f}]`;
-                inp.className='form-control form-control-sm fc border-0'; inp.maxLength=100;
+                inp.className=`form-control form-control-sm fc border-0 ip-${f}`; inp.maxLength=100;
                 td.append(inp); tr.append(td);
             });
             const tdBtn = document.createElement('td'); tdBtn.className='text-center align-middle';
             tdBtn.innerHTML=`<button type="button" class="btn btn-sm btn-outline-danger btn-remove-ident-partida px-1 py-0"><i class="bi bi-trash" style="font-size:.65rem"></i></button>`;
             tr.prepend(td1); tr.append(tdBtn);
             tbody.append(tr);
-            tr.querySelector('.btn-remove-ident-partida')?.addEventListener('click', () => tr.remove());
+            attachIdentPartidaRow(tr);
         });
 
         // Listeners eliminar contribución/identificador existentes
         bloque.querySelectorAll('.btn-remove-contrib-partida').forEach(attachContribRemove);
-        bloque.querySelectorAll('.btn-remove-ident-partida').forEach(btn =>
-            btn.addEventListener('click', () => btn.closest('tr').remove())
-        );
+        bloque.querySelectorAll('.ident-partida-fila').forEach(attachIdentPartidaRow);
+    }
+
+    // ── Reglas Apéndice 8 Anexo 22 — Identificadores a Nivel Partida (P) ──
+    const RULES_IDENT_PARTIDA = {
+        'DP': { c1: { enabled: true, ph: 'Identificar artículos promocionales conforme a la regla 4.5.27' }, c2: { enabled: false }, c3: { enabled: false } },
+        'DR': { c1: { enabled: true, ph: 'Rectificar datos asentados conforme a la regla 4.5.7' }, c2: { enabled: false }, c3: { enabled: false } },
+        'DS': { c1: { enabled: true, ph: 'Número de acta de hechos' }, c2: { enabled: false }, c3: { enabled: false } },
+        'DT': { c1: { enabled: true, ph: 'Clave del supuesto aplicable conforme al catálogo del Apéndice 8' }, c2: { enabled: false }, c3: { enabled: false } },
+        'EP': { c1: { enabled: true, ph: 'Clave de excepción conforme a la regla 1.3.1' }, c2: { enabled: false }, c3: { enabled: false } },
+        'ES': {
+            c1: { enabled: true, ph: 'N = Nuevos; U = Usados; R = Reconstruidos; RM = Remanufacturados', options: ['N', 'U', 'R', 'RM'] },
+            c2: { enabled: true, ph: 'Si se declara RM, indicar tratado: T-MEC o TIP', options: ['T-MEC', 'TIP'] },
+            c3: { enabled: false }
+        },
+        'EX': { c1: { enabled: true, ph: 'Clave del supuesto de excepción (regla 1.6.29 y Apéndice 8)' }, c2: { enabled: false }, c3: { enabled: false } },
+        'FC': {
+            c1: { enabled: true, ph: '1 = Fracción tarifa anterior; 2 = Nueva tarifa', options: ['1', '2'] },
+            c2: { enabled: true, ph: 'Fracción arancelaria correlacionada' },
+            c3: { enabled: true, ph: 'NICO que corresponda' }
+        },
+        'IF': { c1: { enabled: false }, c2: { enabled: false }, c3: { enabled: false } },
+        'II': { c1: { enabled: false }, c2: { enabled: false }, c3: { enabled: false } },
+        'IN': {
+            c1: { enabled: true, ph: 'Clave del supuesto (1, 2, 4, 5, 6, 11, 14...)' },
+            c2: { enabled: true, ph: 'Número de acta (SIRESI o 1er reconocimiento)' },
+            c3: { enabled: true, ph: '1 = Primer reconoc.; 2 = No aplica; 3 = Toma de muestras; 4 = Verific. en transporte', options: ['1', '2', '3', '4'] }
+        },
+        'IS': { c1: { enabled: true, ph: 'Fracción del Art. 61 de la Ley que aplica' }, c2: { enabled: false }, c3: { enabled: false } },
+        'LP': {
+            c1: { enabled: true, ph: '1er material de escaso abasto (Ap. 1 Anexo 4-A TIPAT)' },
+            c2: { enabled: true, ph: '2do material de escaso abasto (si existe)' },
+            c3: { enabled: true, ph: '3er material de escaso abasto (si existe)' }
+        },
+        'ME': {
+            c1: { enabled: true, ph: 'Fracción y NICO: 9803.00.01 00 o 9803.00.02 00', options: ['9803.00.01 00', '9803.00.02 00'] },
+            c2: { enabled: false },
+            c3: { enabled: false }
+        },
+        'MM': {
+            c1: { enabled: true, ph: '1 = Juguetes; 2 = Otros', options: ['1', '2'] },
+            c2: { enabled: false },
+            c3: { enabled: false }
+        },
+        'MR': { c1: { enabled: true, ph: 'Número de oficio de autorización emitido por la ANAM' }, c2: { enabled: false }, c3: { enabled: false } },
+        'MV': {
+            c1: { enabled: true, ph: 'Año-modelo a 4 dígitos' },
+            c2: { enabled: true, ph: 'Número correspondiente catálogo de precios estimados' },
+            c3: { enabled: true, ph: 'Número de registro empresa proveedora vehículos usados' }
+        },
+        'NA': {
+            c1: { enabled: true, ph: 'Clave del acuerdo o supuesto de preferencia (Apéndice 8)' },
+            c2: { enabled: true, ph: 'Constancia de exportación Secretaría de Economía' },
+            c3: { enabled: true, ph: 'País de origen de la mercancía' }
+        },
+        'NT': {
+            c1: { enabled: true, ph: 'Clave del país Parte del Tratado (Apéndice 4)' },
+            c2: { enabled: true, ph: 'Clave de la nota apéndice decreto / número de artículo' },
+            c3: { enabled: false }
+        },
+        'NZ': { c1: { enabled: false }, c2: { enabled: false }, c3: { enabled: false } },
+        'TB': {
+            c1: { enabled: true, ph: '1=Confecciones; 2=Calzado; 3=Electrodomésticos; 4=Juguetes; 5=LIEPS; 6=Electrónicos; 7=Textiles; 8=Llantas; 9=Plaguicidas', options: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] },
+            c2: { enabled: false },
+            c3: { enabled: false }
+        },
+        'TC': { c1: { enabled: true, ph: 'Fracción arancelaria indicada con código CORR' }, c2: { enabled: false }, c3: { enabled: false } },
+        'TL': {
+            c1: { enabled: true, ph: 'Clave del país/grupo exportador (Apéndice 4)' },
+            c2: { enabled: true, ph: 'Clave o código del Tratado (Apéndice 8)' },
+            c3: { enabled: true, ph: 'Certificado de origen cuando corresponda' }
+        },
+        'VT': { c1: { enabled: true, ph: 'Clave del tipo/capacidad del vehículo (Apéndice 8)' }, c2: { enabled: false }, c3: { enabled: false } },
+        'ZC': { c1: { enabled: true, ph: 'Contenido de azúcar expresado en kilogramos' }, c2: { enabled: false }, c3: { enabled: false } }
+    };
+
+    function initDatalistsPartida() {
+        if (document.getElementById('datalistsIdentPartida')) return;
+        const container = document.createElement('div');
+        container.id = 'datalistsIdentPartida';
+        container.style.display = 'none';
+
+        Object.entries(RULES_IDENT_PARTIDA).forEach(([clave, rule]) => {
+            ['c1', 'c2', 'c3'].forEach(cKey => {
+                const cRule = rule[cKey];
+                if (cRule && cRule.options && cRule.options.length > 0) {
+                    const dl = document.createElement('datalist');
+                    dl.id = `list_ip_${clave}_${cKey}`;
+                    cRule.options.forEach(optVal => {
+                        const opt = document.createElement('option');
+                        opt.value = optVal;
+                        dl.appendChild(opt);
+                    });
+                    container.appendChild(dl);
+                }
+            });
+        });
+        document.body.appendChild(container);
+    }
+
+    function applyIdentPartidaRule(tr) {
+        if (!tr) return;
+        const selClave = tr.querySelector('.ip-clave');
+        if (!selClave) return;
+
+        const clave = selClave.value;
+        const rule = RULES_IDENT_PARTIDA[clave];
+
+        ['c1', 'c2', 'c3'].forEach(cKey => {
+            const inp = tr.querySelector(`.ip-${cKey}`);
+            if (!inp) return;
+
+            const cRule = rule ? rule[cKey] : { enabled: true, ph: '' };
+
+            if (!cRule || !cRule.enabled) {
+                inp.value = '';
+                inp.placeholder = 'No asentar datos. (Vacío)';
+                inp.disabled = true;
+                inp.readOnly = true;
+                inp.style.backgroundColor = 'rgba(100, 116, 139, 0.12)';
+                inp.style.opacity = '0.5';
+                inp.style.cursor = 'not-allowed';
+                inp.removeAttribute('list');
+                inp.removeAttribute('title');
+            } else {
+                inp.disabled = false;
+                inp.readOnly = false;
+                inp.style.backgroundColor = '';
+                inp.style.opacity = '1';
+                inp.style.cursor = '';
+                inp.placeholder = cRule.ph || '';
+
+                if (cRule.options && cRule.options.length > 0) {
+                    inp.setAttribute('list', `list_ip_${clave}_${cKey}`);
+                    inp.title = 'Opciones sugeridas: ' + cRule.options.join(', ');
+                } else {
+                    inp.removeAttribute('list');
+                    inp.removeAttribute('title');
+                }
+            }
+        });
+    }
+
+    function attachIdentPartidaRow(tr) {
+        if (!tr) return;
+        const selClave = tr.querySelector('.ip-clave');
+        if (selClave) {
+            selClave.addEventListener('change', () => applyIdentPartidaRule(tr));
+        }
+        applyIdentPartidaRule(tr);
+        tr.querySelector('.btn-remove-ident-partida')?.addEventListener('click', () => tr.remove());
     }
 
     function attachContribRemove(tr) {
@@ -2670,7 +2818,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Inicializar listeners en partidas existentes (edición)
+    // Inicializar listeners e identificadores a nivel partida existentes
+    initDatalistsPartida();
+    document.querySelectorAll('.ident-partida-fila').forEach(attachIdentPartidaRow);
     document.querySelectorAll('.partida-bloque').forEach(attachPartidaListeners);
 
     // Recalcular partidas cuando cambia val aduana (tipo cambio, etc.)
